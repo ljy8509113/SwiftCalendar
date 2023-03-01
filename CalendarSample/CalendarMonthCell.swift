@@ -16,10 +16,7 @@ class CalendarMonthCell: UICollectionViewCell {
     var data: CalendarMonthObject?
     var cellHeight: CGFloat = Common.CELL_HEIGHT
     
-    var scope: CalendarScope = .month
-    
     var selectedRow: Int?
-    
     var movePoint: CGFloat = 0.0
     
     var delegate: CalendarDelegate?
@@ -50,16 +47,15 @@ class CalendarMonthCell: UICollectionViewCell {
         
     }
     
-    func setup(scope: CalendarScope,
-               data: CalendarMonthObject,
+    func setup(data: CalendarMonthObject,
                cellHeight: CGFloat,
                delegate: CalendarDelegate) {
-        self.scope = scope
+        
         self.data = data
         self.cellHeight = cellHeight
         self.delegate = delegate
         
-        if scope == .month  {
+        if self.delegate?.scope() == .month  {
             self.selectedRow = nil
         } else {
             self.selectedRow = existSelectedRow()
@@ -129,14 +125,14 @@ class CalendarMonthCell: UICollectionViewCell {
         }
     }
 
-    func moveWeekIndex(index: Int) {
-        if let cell = self.collectionView.visibleCells.first(where: { $0.tag == self.selectedRow }) as? CalendarWeekCell {
-//            cell.scrollToIndex(index: index, isAnimation: true)
-            if let view = cell.contentView.subviews.first(where: { ($0 as? CalendarWeekContainerCell) != nil }) as? CalendarWeekContainerCell {
-                view.scrollToIndex(index: index, isAnimation: true)
-            }
-        }
-    }
+//    func moveWeekIndex(index: Int) {
+//        if let cell = self.collectionView.visibleCells.first(where: { $0.tag == self.selectedRow }) as? CalendarWeekCell {
+////            cell.scrollToIndex(index: index, isAnimation: true)
+//            if let view = cell.contentView.subviews.first(where: { ($0 as? CalendarWeekContainerCell) != nil }) as? CalendarWeekContainerCell {
+//                view.scrollToIndex(index: index, isAnimation: true)
+//            }
+//        }
+//    }
     
     func updateDate(data: CalendarMonthObject?, cell: CalendarWeekContainerCell) {
         self.data = data
@@ -163,10 +159,9 @@ extension CalendarMonthCell: UICollectionViewDataSource {
 //            cell.setup(array: weekData.arrayDays, cellHeight: self.cellHeight, delegate: self)
             cell.setup(selectDate: self.delegate?.selectedDate(), array: weekData.arrayDays, cellHeight: self.cellHeight, callbackOnClick: { [weak self] date in
                 self?.setSelectDay(date: date)
-                
             })
             
-            if self.scope == .month {
+            if self.delegate?.scope() == .month {
                 cell.changeAlpha(alpha: 1.0)
             }
         }
@@ -223,5 +218,10 @@ extension CalendarMonthCell: CalendarDelegate {
     
     func changeWeek(date: Date) {
         selectDate(date: date)
+        self.delegate?.changeWeek(date: date)
+    }
+    
+    func scope() -> CalendarScope {
+        return self.delegate?.scope() ?? .month
     }
 }

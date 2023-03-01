@@ -10,21 +10,16 @@ import RxCocoa
 import RxSwift
 
 class CalendarMonthContainerCell: UICollectionViewCell {
-    @IBOutlet weak var viewTop: UIView!
-    @IBOutlet weak var constraintTop: NSLayoutConstraint!
-    @IBOutlet weak var labelMonth: UILabel!
     
-    @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var constraintTop: NSLayoutConstraint!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var constraintCollectionHeight: NSLayoutConstraint!
-    
-    var scope: CalendarScope = .month
     
     var arrayMonth: [CalendarMonthObject] = []
     var cellHeight: CGFloat = Common.CELL_HEIGHT
     
     var isInit: Bool = true
-    var formatter = DateFormatter()
+//    var formatter = DateFormatter()
     var calendar = Calendar.current
     
     var delegate: CalendarDelegate?
@@ -33,16 +28,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        self.formatter.dateFormat = "yyyyMM"
-        
-        let arrayWeekStr = ["일", "월", "화", "수", "목", "금", "토"]
-        for day in arrayWeekStr {
-            let label = UILabel(frame: .zero)
-            label.text = day
-            label.textAlignment = .center
-            label.textColor = .black
-            self.stackView.addArrangedSubview(label)
-        }
+//        self.formatter.dateFormat = "yyyyMM"
         
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
@@ -59,11 +45,10 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         
     }
     
-    func setup(scope: CalendarScope = .month,
-               delegate: CalendarDelegate,
+    func setup(delegate: CalendarDelegate,
                width: CGFloat = UIScreen.main.bounds.width,
                cellHeight: CGFloat) {
-        self.scope = scope
+        
         self.cellHeight = cellHeight
         self.delegate = delegate
         
@@ -98,8 +83,6 @@ class CalendarMonthContainerCell: UICollectionViewCell {
             x = collectionView.contentSize.width - width
         }
         self.collectionView.setContentOffset(CGPoint(x: x, y: 0.0), animated: isAnimation)
-        self.labelMonth.text = formatter.string(from: selectedDate())
-        
     }
     
     func scrollToCenter(scrollView: UIScrollView) {
@@ -121,6 +104,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
             }
             let select = strongSelf.arrayMonth[1].date
             if let date = getFirstDayOfMonth(date: select) {
+                strongSelf.changeWeek(date: date)
                 strongSelf.selectDate(date: date)
                 strongSelf.setSelectDay(date: date)
             }
@@ -157,9 +141,9 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         return nil
     }
     
-    func topSize() -> CGFloat {
-        return self.viewTop.frame.size.height + self.stackView.frame.size.height
-    }
+//    func topSize() -> CGFloat {
+//        return self.viewTop.frame.size.height + self.stackView.frame.size.height
+//    }
     
     func moveScroll(pointY: CGFloat, isFinish: Bool) {
         guard let cell = currentCell() else {
@@ -173,24 +157,19 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         let monthHeight = monthCollectionViewHeight(index: 1)
         if pointY == monthHeight - self.cellHeight {
             self.collectionView.isScrollEnabled = false
-            self.scope = .week
-            
         } else if pointY == 0.0 {
             self.collectionView.isScrollEnabled = true
-            self.scope = .month
             self.collectionView.reloadData()
         } else {
             self.collectionView.isScrollEnabled = false
-            self.scope = .changing
         }
-        cell.scope = self.scope
     }
 
     func getModeHeight(scope: CalendarScope) -> CGFloat {
         if scope == .month {
-            return monthCollectionViewHeight(index: 1) + topSize()
+            return monthCollectionViewHeight(index: 1) // + topSize()
         } else {
-            return self.cellHeight + topSize()
+            return self.cellHeight // + topSize()
         }
     }
     
@@ -201,7 +180,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
     }
     
     func maxHeight(cellHeight: CGFloat) -> CGFloat {
-        return cellHeight * 6.0 + topSize()
+        return cellHeight * 6.0 // + topSize()
     }
     
     func currentCollectionViewHeight() -> CGFloat {
@@ -233,24 +212,9 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         currentCell()?.updateDate(data: data, cell: cell)
     }
     
-    @IBAction func onNext(_ sender: Any) {
-        if self.scope == .month {
-            scrollToIndex(index: 2, isAnimation: true)
-        } else if self.scope == .week {
-            if let cell = currentCell() {
-                cell.moveWeekIndex(index: 2)
-            }
-        }
-    }
-    
-    @IBAction func onPrevioues(_ sender: Any) {
-        if self.scope == .month {
-            scrollToIndex(index: 0, isAnimation: true)
-        } else if self.scope == .week {
-            if let cell = currentCell() {
-                cell.moveWeekIndex(index: 0)
-            }
-        }
+    func moveAction(isNext: Bool) {
+        let index = isNext ? 2 : 0
+        scrollToIndex(index: index, isAnimation: true)
     }
 }
 
@@ -281,7 +245,7 @@ extension CalendarMonthContainerCell: UICollectionViewDataSource {
         let data = self.arrayMonth[indexPath.row]
         cell.tag = indexPath.row
 //        cell.setup(scope: self.scope, data: data, selectDate: self.selectDate, cellHeight: self.cellHeight, delegate: self)
-        cell.setup(scope: self.scope, data: data, cellHeight: self.cellHeight, delegate: self)
+        cell.setup(data: data, cellHeight: self.cellHeight, delegate: self)
         return cell
         
     }
@@ -298,27 +262,29 @@ extension CalendarMonthContainerCell: UICollectionViewDataSource {
 extension CalendarMonthContainerCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = UIScreen.main.bounds.width
-//        return CGSize(width: width, height: self.constraintCollectionHeight.constant)
         return CGSize(width: width, height: self.cellHeight * 6.0)
     }
 }
 
 extension CalendarMonthContainerCell : CalendarDelegate {
     func changeHeight(height: CGFloat) {
-        let cellHeight = height + topSize()
+        let cellHeight = height // + topSize()
         self.delegate?.changeHeight(height: cellHeight)
     }
     
     func changeWeek(date: Date) {
+        self.delegate?.changeWeek(date: date)
     }
     
     func selectDate(date: Date) {
         self.delegate?.selectDate(date: date)
-        self.labelMonth.text = self.formatter.string(from: date)
     }
     
     func selectedDate() -> Date {
         return self.delegate?.selectedDate() ?? Date()
     }
-    
+ 
+    func scope() -> CalendarScope {
+        return self.delegate?.scope() ?? .month
+    }
 }

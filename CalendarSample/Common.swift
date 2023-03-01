@@ -24,6 +24,7 @@ protocol CalendarDelegate {
     func changeWeek(date: Date)
     func selectDate(date: Date)
     func selectedDate() -> Date
+    func scope() -> CalendarScope
 }
 
 class Common: NSObject {

@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
-        self.calendarView.setup(selectDate: Date(), callbackSelect: { [weak self] date in
+        self.calendarView.setup(selectDate: Date(), isOnlyWeek: false, callbackSelect: { [weak self] date in
             
         })
         
