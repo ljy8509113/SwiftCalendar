@@ -305,7 +305,6 @@ extension CalendarMonthContainerCell: UICollectionViewDelegateFlowLayout {
 
 extension CalendarMonthContainerCell : CalendarDelegate {
     func changeHeight(height: CGFloat) {
-        print("changeHeight: \(height)")
         let cellHeight = height + topSize()
         self.delegate?.changeHeight(height: cellHeight)
     }

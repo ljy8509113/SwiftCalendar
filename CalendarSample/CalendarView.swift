@@ -103,7 +103,7 @@ class CalendarView: UIView {
             let monthHeight = cell.monthCollectionViewHeight(index: 1)
             let max = monthHeight - self.cellHeight
             let current = cell.currentCollectionViewHeight()
-            print("y: \(offset.y) :: \(max) current : \(current) :: \(monthHeight)")
+//            print("y: \(offset.y) :: \(max) current : \(current) :: \(monthHeight)")
             if offset.y <= max || (current != monthHeight && current != self.cellHeight) {
                 if offset.y <= 0.0, current == monthHeight {
                     return
@@ -267,8 +267,15 @@ extension CalendarView: UICollectionViewDelegateFlowLayout {
 
 extension CalendarView: CalendarDelegate {
     func changeHeight(height: CGFloat) {
-        self.calendarCellHeight = height
-        self.collectionView.collectionViewLayout.invalidateLayout()
+        if self.calendarCellHeight != height {
+            print("changeHeight: current: \(self.calendarCellHeight) :: chage: \(height)")
+            if self.collectionView.contentOffset.y > 0.0 {
+                let gab = height - self.calendarCellHeight
+                self.monthContainerCell?.constraintTop.constant += gab
+            }
+            self.calendarCellHeight = height
+            self.collectionView.collectionViewLayout.invalidateLayout()
+        }
     }
     
     func changeWeek(date: Date) {

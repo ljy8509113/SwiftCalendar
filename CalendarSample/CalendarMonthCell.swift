@@ -165,6 +165,10 @@ extension CalendarMonthCell: UICollectionViewDataSource {
                 self?.setSelectDay(date: date)
                 
             })
+            
+            if self.scope == .month {
+                cell.changeAlpha(alpha: 1.0)
+            }
         }
         return cell
     }
@@ -198,7 +202,7 @@ extension CalendarMonthCell: UICollectionViewDelegateFlowLayout {
             cell?.changeAlpha(alpha: self.cellAlpha)
             self.weekContainerCell?.alpha = 1.0 - self.cellAlpha
             
-//            print("3. cell index : \(indexPath.row) :: \(self.cellHeight)")
+//            print("3. cell index : \(indexPath.row) :: \(self.cellHeight) :: \(self.cellAlpha)")
             return CGSize(width: collectionView.frame.size.width, height: self.cellHeight)
         }
     }
