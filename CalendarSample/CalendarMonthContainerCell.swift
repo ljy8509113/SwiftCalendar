@@ -210,7 +210,12 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         setArray(date: date)
         self.collectionView.reloadData()
         self.collectionView.performBatchUpdates({}, completion: { [weak self] _ in
-            self?.scrollToIndex(index: 1)
+            guard let strongSelf = self else {
+                return
+            }
+            strongSelf.scrollToIndex(index: 1)
+            let height = strongSelf.monthCollectionViewHeight(index: 1)
+            strongSelf.changeHeight(height: height)
         })
     }
 }
