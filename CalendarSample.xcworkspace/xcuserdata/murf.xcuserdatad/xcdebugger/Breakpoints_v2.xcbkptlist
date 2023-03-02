@@ -235,16 +235,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F087E1D8-534C-487E-8DD6-CBA1BE3704FB"
-            shouldBeEnabled = "No"
+            uuid = "68BB053D-FA7A-4E72-8840-258F81CD308F"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CalendarSample/CalendarView.swift"
+            filePath = "CalendarSample/ViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
-            landmarkName = "setup(selectDate:type:width:cellHeight:callbackSelect:)"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

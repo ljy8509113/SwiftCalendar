@@ -14,7 +14,7 @@ import RxGesture
 class CalendarView: UIView {
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var arrayEvent: [String] = []
+    var arrayEvent: [ArtistNewsEventObject] = []
     var calendarCellHeight: CGFloat = 0.0
     
     var callbackSelect: ((Date?) -> Void)?
@@ -58,9 +58,9 @@ class CalendarView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        for i in 0...2 {
-            self.arrayEvent.append("\(i)")
-        }
+//        for i in 0...2 {
+//            self.arrayEvent.append("\(i)")
+//        }
         
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MonthCell")
         self.collectionView.registerNib(type: CalendarWeekContainerCell.self)
@@ -90,6 +90,7 @@ class CalendarView: UIView {
     
     func setup(selectDate: Date?,
                type: CalendarType,
+               events: [ArtistNewsEventObject]?,
                width: CGFloat = UIScreen.main.bounds.width,
                cellHeight: CGFloat = 60.0,
                callbackSelect: ((Date?) -> Void)?) {
@@ -222,6 +223,10 @@ class CalendarView: UIView {
             }
             self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: bottom, right: 0.0)
         }
+    }
+    
+    func updateEvents(events: [ArtistNewsEventObject]?) {
+        
     }
 }
 
