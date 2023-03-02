@@ -45,8 +45,7 @@ class CalendarDayView: UIView {
         let isSelect = selectDate?.isSameDate(date: data?.date) ?? false
         
         setSelectDay(isSelect: isSelect)
-        self.layer.borderColor = UIColor.black.cgColor
-        self.layer.borderWidth = 1.0
+        
     }
     
     @IBAction func onSelect(_ sender: Any) {

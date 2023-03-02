@@ -1,0 +1,65 @@
+
+{
+  "events": [
+    {
+      "contents": "RT @Valentino: #MaisonValentinoEssentials comes to the forefront through a special campaign with @GQMagazine and #SUGA of #BTS.",
+      "detail_link": "https://twitter.com/335141638/status/1615035784549265408",
+      "end_date": "2023-01-19T12:00:00+09:00",
+      "is_all_day": false,
+      "members": [
+        {
+          "tag_code": "all",
+          "tag_name": "단체"
+        },
+        {
+          "tag_code": "6506",
+          "tag_name": "가을"
+        }
+      ],
+      "news_id": 345,
+      "place": "Maxfield, LA",
+      "start_date": "2023-01-17T02:18:31+09:00",
+      "tags": [
+        {
+          "tag_code": "anniversary",
+          "tag_name": "기념일"
+        },
+        {
+          "tag_code": "release",
+          "tag_name": "발매"
+        }
+      ],
+      "title": "Stay tuned and shop the pieces only at LA’s Maxfield"
+    },
+    {
+      "contents": "RT @Valentino: #MaisonValentinoEssentials comes to the forefront through a special campaign with @GQMagazine and #SUGA of #BTS.",
+      "detail_link": "https://twitter.com/335141638/status/1615035784549265408",
+      "end_date": "2023-01-19T12:00:00+09:00",
+      "is_all_day": false,
+      "members": [
+        {
+          "tag_code": "all",
+          "tag_name": "단체"
+        },
+        {
+          "tag_code": "6506",
+          "tag_name": "가을"
+        }
+      ],
+      "news_id": 345,
+      "place": "Maxfield, LA",
+      "start_date": "2023-01-17T02:18:31+09:00",
+      "tags": [
+        {
+          "tag_code": "anniversary",
+          "tag_name": "기념일"
+        },
+        {
+          "tag_code": "release",
+          "tag_name": "발매"
+        }
+      ],
+      "title": "Stay tuned and shop the pieces only at LA’s Maxfield"
+    }
+  ]
+}

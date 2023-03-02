@@ -251,8 +251,12 @@ extension CalendarView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let count = self.arrayEvent.count == 0 ? 1 : self.arrayEvent.count
-        return count + 1
+        if self.calendarType == .monthAndWeek {
+            let count = self.arrayEvent.count == 0 ? 1 : self.arrayEvent.count
+            return count + 1
+        } else {
+            return 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

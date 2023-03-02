@@ -17,8 +17,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="SnA-JQ-jiO">
+                                <rect key="frame" x="0.0" y="59" width="393" height="80"/>
+                                <color key="backgroundColor" systemColor="systemBrownColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="pjf-4r-xX8"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j7v-WU-7fw" customClass="CalendarView" customModule="CalendarSample" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <rect key="frame" x="0.0" y="139" width="393" height="679"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
@@ -26,9 +33,12 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="j7v-WU-7fw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="DiG-zg-hja"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="SnA-JQ-jiO" secondAttribute="trailing" id="EX4-36-87P"/>
+                            <constraint firstItem="j7v-WU-7fw" firstAttribute="top" secondItem="SnA-JQ-jiO" secondAttribute="bottom" id="Ehu-tB-Rc8"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="j7v-WU-7fw" secondAttribute="bottom" id="I4M-m5-zY7"/>
+                            <constraint firstItem="SnA-JQ-jiO" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="RZs-k8-uAa"/>
                             <constraint firstItem="j7v-WU-7fw" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="cCg-ae-vD9"/>
-                            <constraint firstItem="j7v-WU-7fw" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="jV9-H3-wMC"/>
+                            <constraint firstItem="SnA-JQ-jiO" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="zds-ts-GuP"/>
                         </constraints>
                     </view>
                     <connections>
@@ -43,6 +53,9 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBrownColor">
+            <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

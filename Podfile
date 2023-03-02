@@ -10,4 +10,6 @@ target 'CalendarSample' do
   pod 'RxCocoa'
   pod 'SnapKit'
   pod 'RxGesture'
+  pod 'ObjectMapper'
+  pod 'SwiftDate'
 end
