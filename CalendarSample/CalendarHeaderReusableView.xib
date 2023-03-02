@@ -45,6 +45,17 @@
                                 <action selector="onNext:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="U1s-UV-T4Y"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TW5-DQ-LrN">
+                            <rect key="frame" x="200" y="2.6666666666666679" width="60" height="35"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="60" id="92X-O3-EJl"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" title="오늘"/>
+                            <connections>
+                                <action selector="onToday:" destination="U6b-Vx-4bR" eventType="touchUpInside" id="8go-bh-cpy"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     <constraints>
@@ -52,7 +63,9 @@
                         <constraint firstItem="72u-3v-uRw" firstAttribute="leading" secondItem="tGT-oL-vZD" secondAttribute="leading" id="738-Gt-pmH"/>
                         <constraint firstItem="72u-3v-uRw" firstAttribute="centerY" secondItem="tGT-oL-vZD" secondAttribute="centerY" id="ATk-A0-xSz"/>
                         <constraint firstItem="ulT-DV-fyW" firstAttribute="leading" secondItem="tGT-oL-vZD" secondAttribute="leading" id="JVo-jN-bcg"/>
+                        <constraint firstItem="WI7-Dl-tlk" firstAttribute="leading" secondItem="TW5-DQ-LrN" secondAttribute="trailing" constant="10" id="T1E-Mo-sPL"/>
                         <constraint firstAttribute="trailing" secondItem="WI7-Dl-tlk" secondAttribute="trailing" id="grA-H4-UlJ"/>
+                        <constraint firstItem="TW5-DQ-LrN" firstAttribute="centerY" secondItem="tGT-oL-vZD" secondAttribute="centerY" id="kdV-1K-de2"/>
                         <constraint firstAttribute="height" constant="40" id="pui-dg-em5"/>
                         <constraint firstAttribute="trailing" secondItem="72u-3v-uRw" secondAttribute="trailing" id="sKA-LD-hkP"/>
                         <constraint firstAttribute="bottom" secondItem="WI7-Dl-tlk" secondAttribute="bottom" id="uxU-im-aVR"/>
@@ -80,6 +93,7 @@
                 <constraint firstItem="tGT-oL-vZD" firstAttribute="leading" secondItem="U6b-Vx-4bR" secondAttribute="leading" id="zXQ-mX-Fo0"/>
             </constraints>
             <connections>
+                <outlet property="buttonToday" destination="TW5-DQ-LrN" id="89l-VY-rFL"/>
                 <outlet property="labelMonth" destination="72u-3v-uRw" id="ldj-Ox-2wm"/>
                 <outlet property="stackView" destination="69t-Te-L1T" id="AdD-l4-muP"/>
                 <outlet property="viewTop" destination="tGT-oL-vZD" id="egw-Bg-lLY"/>

@@ -7,16 +7,22 @@
 
 import Foundation
 
-enum CalendarScope {
+enum CalendarStatus {
     case month
     case week
     case changing
 }
 
-enum AnimationState {
-    case wait
-    case animating
-    case end
+enum CalendarMoveType {
+    case today
+    case previous
+    case next
+}
+
+enum CalendarType {
+    case onlyMonth
+    case onlyWeek
+    case monthAndWeek
 }
 
 protocol CalendarDelegate {
@@ -24,10 +30,9 @@ protocol CalendarDelegate {
     func changeWeek(date: Date)
     func selectDate(date: Date)
     func selectedDate() -> Date
-    func scope() -> CalendarScope
+    func status() -> CalendarStatus
 }
 
 class Common: NSObject {
     static let CELL_HEIGHT = 60.0
-    static let TOP_HEIGHT = 90.0
 }

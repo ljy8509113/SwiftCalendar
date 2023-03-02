@@ -144,6 +144,20 @@ class CalendarWeekContainerCell: UICollectionViewCell {
             })
         }
     }
+    
+    func moveDate(date: Date) {
+        if let weekOfFirstDay = self.calendar.startDayOfWeek(date: date) {
+            self.data?.update(date: weekOfFirstDay)
+            setArray(date: weekOfFirstDay)
+            self.collectionView.reloadData()
+            self.collectionView.performBatchUpdates({}, completion: { [weak self] _ in
+                self?.scrollToIndex(index: 1)
+                self?.setSelectDay(date: date)
+            })
+        }
+        
+    }
+    
 }
 
 extension CalendarWeekContainerCell: UICollectionViewDataSource {

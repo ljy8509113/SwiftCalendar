@@ -12,8 +12,10 @@ class CalendarHeaderReusableView: UICollectionReusableView {
     @IBOutlet weak var viewTop: UIView!
     @IBOutlet weak var labelMonth: UILabel!
     
+    @IBOutlet weak var buttonToday: UIButton!
     @IBOutlet weak var stackView: UIStackView!
-    var callbackMove: ((Bool) -> Void)?
+    
+    var callbackMove: ((CalendarMoveType) -> Void)?
     var formatter: DateFormatter = DateFormatter()
     var date: Date?
     
@@ -31,7 +33,7 @@ class CalendarHeaderReusableView: UICollectionReusableView {
         }
     }
     
-    func setup(date: Date, callbackMove: ((Bool) -> Void)?) {
+    func setup(date: Date, callbackMove: ((CalendarMoveType) -> Void)?) {
         self.callbackMove = callbackMove
         update(date: date)
     }
@@ -44,11 +46,15 @@ class CalendarHeaderReusableView: UICollectionReusableView {
     }
     
     @IBAction func onNext(_ sender: Any) {
-        self.callbackMove?(true)
+        self.callbackMove?(.next)
     }
     
     @IBAction func onPrevioues(_ sender: Any) {
-        self.callbackMove?(false)
+        self.callbackMove?(.previous)
+    }
+    
+    @IBAction func onToday(_ sender: Any) {
+        self.callbackMove?(.today)
     }
     
 }

@@ -76,7 +76,7 @@ extension Date {
 
 extension Calendar {
     func getMonthOfWeekCount(date: Date) -> Int {
-        let start = startDayOfWeek(date: date)
+        let start = startIndexOfMonth(date: date)
         let end = endDate(date: date) ?? 0
         let monthEnd = end + start
         var rows = monthEnd / 7
@@ -89,7 +89,7 @@ extension Calendar {
         return rows
     }
     
-    func startDayOfWeek(date: Date) -> Int {
+    func startIndexOfMonth(date: Date) -> Int {
         let year = self.component(.year, from: date)
         let month = self.component(.month, from: date)
         let firstDate = self.date(from: DateComponents(year: year, month: month, day: 1)) ?? Date()
@@ -98,5 +98,15 @@ extension Calendar {
     
     func endDate(date: Date) -> Int? {
         return self.range(of: .day, in: .month, for: date)?.count
+    }
+    
+    func startDayOfWeek(date: Date) -> Date? {
+        let year = self.component(.year, from: date)
+        let month = self.component(.month, from: date)
+        let day = self.component(.day, from: date)
+        let firstDate = self.date(from: DateComponents(year: year, month: month, day: day)) ?? Date()
+        let index = self.component(.weekday, from: firstDate) - 1
+        
+        return self.date(byAdding: DateComponents(day: -(index)), to: date)
     }
 }

@@ -14,8 +14,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
-        self.calendarView.setup(selectDate: Date(), isOnlyWeek: false, callbackSelect: { [weak self] date in
+        self.view.backgroundColor = .white
+        self.calendarView.setup(selectDate: Date(), type: .monthAndWeek, callbackSelect: { [weak self] date in
             
         })
         

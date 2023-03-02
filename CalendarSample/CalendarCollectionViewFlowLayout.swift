@@ -61,8 +61,8 @@ class CalendarCollectionViewFlowLayout: UICollectionViewFlowLayout {
             var monthHeight = weekHeight * 7.0
             
             if let cell = collectionView.cellForItem(at: stickyIndexPath) as? CalendarMonthContainerCell {
-                weekHeight = cell.getModeHeight(scope: .week)
-                monthHeight = cell.getModeHeight(scope: .month)
+                weekHeight = cell.getModeHeight(status: .week)
+                monthHeight = cell.getModeHeight(status: .month)
             }
             
             var frame = stickyAttributes.frame

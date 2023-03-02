@@ -26,7 +26,12 @@ class CalendarView: UIView {
     var monthContainerCell: CalendarMonthContainerCell?
     var weekContainerCell: CalendarWeekContainerCell?
     var date: Date = Date()
-    var isOnlyWeek: Bool = false
+    var calendarType: CalendarType = .monthAndWeek
+    
+    var weekData: CalendarWeekObject?
+    
+    let EVENT_HEIGHT = 100.0
+    let HEADER_HEIGHT = 90.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,20 +50,28 @@ class CalendarView: UIView {
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkBottomMargin()
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        for i in 0...10 {
+        for i in 0...2 {
             self.arrayEvent.append("\(i)")
         }
         
-//        self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MonthCell")
+        self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MonthCell")
+        self.collectionView.registerNib(type: CalendarWeekContainerCell.self)
         self.collectionView.registerNib(type: CalendarMonthContainerCell.self)
         self.collectionView.registerNib(type: CalendarEventCell.self)
         self.collectionView.register(UINib(nibName: "\(CalendarHeaderReusableView.self)", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "\(CalendarHeaderReusableView.self)")
         
         self.collectionView.delegate = self
         self.collectionView.dataSource = self
+        
+//        self.collectionView.bounces = false
         
         let flow = UICollectionViewFlowLayout()
         flow.minimumLineSpacing = 10.0
@@ -76,23 +89,29 @@ class CalendarView: UIView {
     }
     
     func setup(selectDate: Date?,
-               isOnlyWeek: Bool,
+               type: CalendarType,
                width: CGFloat = UIScreen.main.bounds.width,
                cellHeight: CGFloat = 60.0,
                callbackSelect: ((Date?) -> Void)?) {
         self.callbackSelect = callbackSelect
         self.cellHeight = cellHeight
-        self.isOnlyWeek = isOnlyWeek
+        self.calendarType = type
         self.date = selectDate ?? Date()
         
-        if isOnlyWeek {
-            //TODO: 주 달력 전용처리 필요
-        } else {
-            self.calendarCellHeight = CGFloat(Calendar.current.getMonthOfWeekCount(date: self.date)) * self.cellHeight //+ Common.TOP_HEIGHT
-
+        switch type {
+        case .monthAndWeek:
+            self.calendarCellHeight = monthHeight(date: self.date) //+ Common.TOP_HEIGHT
+            
             if self.weekContainerCell == nil {
                 self.weekContainerCell = Bundle.main.loadNibNamed("\(CalendarWeekContainerCell.self)", owner: self)?.first as? CalendarWeekContainerCell
             }
+        case .onlyWeek:
+            self.calendarCellHeight = self.cellHeight
+            self.collectionView.isScrollEnabled = false
+            self.weekData = CalendarWeekObject(date: self.date, array: nil)
+        case .onlyMonth:
+            self.calendarCellHeight = monthHeight(date: self.date)
+            self.collectionView.isScrollEnabled = false
         }
     }
     
@@ -160,7 +179,7 @@ class CalendarView: UIView {
                     //week
                     self.addSubview(weekCell)
                     var frame = weekCell.frame
-                    frame.origin.y = Common.TOP_HEIGHT
+                    frame.origin.y = HEADER_HEIGHT
                     frame.origin.x = 0.0
                     weekCell.frame = frame
                     self.collectionView.isUserInteractionEnabled = true
@@ -178,15 +197,31 @@ class CalendarView: UIView {
         }
     }
     
-    func monthOfRowCount (date: Date) -> Int {
-        let start = Calendar.current.startDayOfWeek(date: date)
-        let end = Calendar.current.endDate(date: date) ?? 0
-        let monthEnd = end + start
-        var rows = monthEnd / 7
-        if monthEnd % 7 > 0 {
-            rows += 1
+    func monthHeight(date: Date) -> CGFloat {
+        if let cell = self.monthContainerCell {
+            return cell.getModeHeight(status: .month)
         }
-        return rows
+        return CGFloat(Calendar.current.getMonthOfWeekCount(date: date)) * self.cellHeight
+    }
+    
+    func checkBottomMargin() {
+        if self.calendarType == .monthAndWeek {
+            //week 모드 height
+            let eventCount = CGFloat(self.arrayEvent.count)
+            let space = (self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumLineSpacing ?? 0.0
+            let eventHeight = eventCount == 0 ? 1 * EVENT_HEIGHT : eventCount * EVENT_HEIGHT
+            let otherHeight = HEADER_HEIGHT + eventHeight + space * (eventCount == 0 ? 1 : eventCount)
+            let weekHeight = otherHeight + self.cellHeight
+            let monthHeight = otherHeight + monthHeight(date: self.date)
+            let height = self.frame.size.height
+            print("checkBottomMargin :: \(weekHeight) :: \(height)")
+
+            var bottom: CGFloat = .zero
+            if monthHeight > height && weekHeight < height {
+                bottom = height - weekHeight
+            }
+            self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: bottom, right: 0.0)
+        }
     }
 }
 
@@ -217,18 +252,23 @@ extension CalendarView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let count = self.arrayEvent.count == 0 ? 1 : self.arrayEvent.count
-        return count // + 1
+        return count + 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row == 0 {
-            if self.monthContainerCell == nil {
-                self.monthContainerCell = collectionView.dequeueReusableCell(type: CalendarMonthContainerCell.self, indexPath: indexPath)
-                self.monthContainerCell?.setup(delegate: self, cellHeight: self.cellHeight)
+            if self.calendarType == .onlyWeek {
+                let cell = collectionView.dequeueReusableCell(type: CalendarWeekContainerCell.self, indexPath: indexPath)
+                cell.setup(data: self.weekData, cellHeight: self.cellHeight, delegate: self)
+                return cell
+            } else {
+                if self.monthContainerCell == nil {
+                    self.monthContainerCell = collectionView.dequeueReusableCell(type: CalendarMonthContainerCell.self, indexPath: indexPath)
+                    self.monthContainerCell?.setup(delegate: self, cellHeight: self.cellHeight)
+                }
+
+                return self.monthContainerCell!
             }
-            
-            return self.monthContainerCell!
-            
         } else {
             let cell = collectionView.dequeueReusableCell(type: CalendarEventCell.self, indexPath: indexPath)
             cell.setup(row: indexPath.row)
@@ -240,12 +280,48 @@ extension CalendarView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "\(CalendarHeaderReusableView.self)", for: indexPath) as? CalendarHeaderReusableView
-            header?.setup(date: self.selectedDate(), callbackMove: { [weak self] isNext in
-                if self?.scope() == .week {
-                    let index = isNext ? 2 : 0
-                    self?.weekContainerCell?.scrollToIndex(index: index, isAnimation: true)
-                } else {
-                    self?.monthContainerCell?.moveAction(isNext: isNext)
+            header?.setup(date: self.selectedDate(), callbackMove: { [weak self] move in
+                
+                switch move {
+                case .today:
+                    self?.selectDate(date: Date())
+                    let date = self?.selectedDate() ?? Date()
+                    self?.changeWeek(date: date)
+                    switch self?.calendarType {
+                    case .onlyWeek:
+                        if let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? CalendarWeekContainerCell {
+                            cell.setArray(date: date)
+                            cell.collectionView.reloadData()
+                        }
+                    case .onlyMonth:
+                        self?.monthContainerCell?.moveDate(date: date)
+                    case .monthAndWeek:
+                        if self?.status() == .week {
+                            self?.weekContainerCell?.moveDate(date: date)
+                        } else {
+                            self?.monthContainerCell?.moveDate(date: date)
+                        }
+                    default:
+                        break
+                    }
+                case .previous: fallthrough
+                case .next:
+                    let index = move == .next ? 2 : 0
+                    if self?.status() == .week {
+                        switch self?.calendarType {
+                        case .onlyWeek:
+                            if let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? CalendarWeekContainerCell {
+                                cell.scrollToIndex(index: index, isAnimation: true)
+                            }
+                        case .monthAndWeek:
+                            self?.weekContainerCell?.scrollToIndex(index: index, isAnimation: true)
+                        default:
+                            self?.monthContainerCell?.scrollToIndex(index: index, isAnimation: true)
+                        }
+                    } else {
+                        self?.monthContainerCell?.scrollToIndex(index: index, isAnimation: true)
+                    }
+                    break
                 }
             })
             
@@ -256,7 +332,7 @@ extension CalendarView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let width = collectionView.frame.size.width
-        return CGSize(width: width, height: 90.0)
+        return CGSize(width: width, height: HEADER_HEIGHT)
     }
 }
 
@@ -267,7 +343,7 @@ extension CalendarView: UICollectionViewDelegateFlowLayout {
 //            print("viewcontroller : h : \(self.calendarCellHeight) :: ")
             return CGSize(width: width, height: self.calendarCellHeight)
         } else {
-            return CGSize(width: width, height: 100)
+            return CGSize(width: width, height: EVENT_HEIGHT)
         }
     }
 }
@@ -282,6 +358,8 @@ extension CalendarView: CalendarDelegate {
             }
             self.calendarCellHeight = height
             self.collectionView.collectionViewLayout.invalidateLayout()
+            
+            checkBottomMargin()
         }
     }
     
@@ -301,18 +379,25 @@ extension CalendarView: CalendarDelegate {
         return self.date
     }
     
-    func scope() -> CalendarScope {
-        let currentHeight = self.monthContainerCell?.currentCollectionViewHeight()
-        let monthHeight = self.monthContainerCell?.getModeHeight(scope: .month)
-        let weekHeight = self.monthContainerCell?.getModeHeight(scope: .week)
-        
-        switch currentHeight {
-        case monthHeight :
-            return .month
-        case weekHeight :
+    func status() -> CalendarStatus {
+        switch self.calendarType {
+        case .onlyWeek :
             return .week
+        case .onlyMonth:
+            return .month
         default:
-            return .changing
+            let currentHeight = self.monthContainerCell?.currentCollectionViewHeight()
+            let monthHeight = self.monthContainerCell?.getModeHeight(status: .month)
+            let weekHeight = self.monthContainerCell?.getModeHeight(status: .week)
+            
+            switch currentHeight {
+            case monthHeight :
+                return .month
+            case weekHeight :
+                return .week
+            default:
+                return .changing
+            }
         }
     }
 }

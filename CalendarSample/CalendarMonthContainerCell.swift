@@ -134,12 +134,6 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         return self.calendar.date(byAdding: DateComponents(weekOfMonth: addValue), to: date)
     }
     
-    func getCenterCell() -> CalendarMonthCell? {
-        if let cell = currentCell() {
-            return cell
-        }
-        return nil
-    }
     
 //    func topSize() -> CGFloat {
 //        return self.viewTop.frame.size.height + self.stackView.frame.size.height
@@ -165,8 +159,8 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         }
     }
 
-    func getModeHeight(scope: CalendarScope) -> CGFloat {
-        if scope == .month {
+    func getModeHeight(status: CalendarStatus) -> CGFloat {
+        if status == .month {
             return monthCollectionViewHeight(index: 1) // + topSize()
         } else {
             return self.cellHeight // + topSize()
@@ -212,9 +206,12 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         currentCell()?.updateDate(data: data, cell: cell)
     }
     
-    func moveAction(isNext: Bool) {
-        let index = isNext ? 2 : 0
-        scrollToIndex(index: index, isAnimation: true)
+    func moveDate(date: Date) {
+        setArray(date: date)
+        self.collectionView.reloadData()
+        self.collectionView.performBatchUpdates({}, completion: { [weak self] _ in
+            self?.scrollToIndex(index: 1)
+        })
     }
 }
 
@@ -244,7 +241,7 @@ extension CalendarMonthContainerCell: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(type: CalendarMonthCell.self, indexPath: indexPath)
         let data = self.arrayMonth[indexPath.row]
         cell.tag = indexPath.row
-//        cell.setup(scope: self.scope, data: data, selectDate: self.selectDate, cellHeight: self.cellHeight, delegate: self)
+//        cell.setup(status: self.status, data: data, selectDate: self.selectDate, cellHeight: self.cellHeight, delegate: self)
         cell.setup(data: data, cellHeight: self.cellHeight, delegate: self)
         return cell
         
@@ -284,7 +281,7 @@ extension CalendarMonthContainerCell : CalendarDelegate {
         return self.delegate?.selectedDate() ?? Date()
     }
  
-    func scope() -> CalendarScope {
-        return self.delegate?.scope() ?? .month
+    func status() -> CalendarStatus {
+        return self.delegate?.status() ?? .month
     }
 }

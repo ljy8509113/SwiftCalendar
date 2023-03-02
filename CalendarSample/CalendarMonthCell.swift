@@ -55,7 +55,7 @@ class CalendarMonthCell: UICollectionViewCell {
         self.cellHeight = cellHeight
         self.delegate = delegate
         
-        if self.delegate?.scope() == .month  {
+        if self.delegate?.status() == .month  {
             self.selectedRow = nil
         } else {
             self.selectedRow = existSelectedRow()
@@ -161,7 +161,8 @@ extension CalendarMonthCell: UICollectionViewDataSource {
                 self?.setSelectDay(date: date)
             })
             
-            if self.delegate?.scope() == .month {
+            if self.delegate?.status() == .month {
+                self.cellAlpha = 0.0
                 cell.changeAlpha(alpha: 1.0)
             }
         }
@@ -221,7 +222,7 @@ extension CalendarMonthCell: CalendarDelegate {
         self.delegate?.changeWeek(date: date)
     }
     
-    func scope() -> CalendarScope {
-        return self.delegate?.scope() ?? .month
+    func status() -> CalendarStatus {
+        return self.delegate?.status() ?? .month
     }
 }

@@ -20,20 +20,9 @@ class CalendarMonthObject: NSObject {
         updateDays()
     }
     
-//    func startDayOfWeek() -> Int {
-//        let year = calendar.component(.year, from: self.date)
-//        let month = calendar.component(.month, from: self.date)
-//        let firstDate = calendar.date(from: DateComponents(year: year, month: month, day: 1)) ?? Date()
-//        return self.calendar.component(.weekday, from: firstDate) - 1
-//    }
-//
-//    func endDate() -> Int? {
-//        return self.calendar.range(of: .day, in: .month, for: self.date)?.count
-//    }
-    
     func updateDays() {
 //        self.arrayWeek.removeAll()
-        let start = self.calendar.startDayOfWeek(date: self.date)
+        let start = self.calendar.startIndexOfMonth(date: self.date)
         let end = self.calendar.endDate(date: self.date) ?? 0
         let monthEnd = end + start
         var rows = monthEnd / 7

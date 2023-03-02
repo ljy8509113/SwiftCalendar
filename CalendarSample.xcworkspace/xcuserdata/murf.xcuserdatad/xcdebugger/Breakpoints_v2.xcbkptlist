@@ -51,8 +51,8 @@
             filePath = "CalendarSample/CalendarWeekContainerCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "157"
-            endingLineNumber = "157"
+            startingLineNumber = "171"
+            endingLineNumber = "171"
             landmarkName = "collectionView(_:cellForItemAt:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -67,8 +67,8 @@
             filePath = "CalendarSample/CalendarMonthCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "183"
+            endingLineNumber = "183"
             landmarkName = "collectionView(_:layout:sizeForItemAt:)"
             landmarkType = "7">
             <Locations>
@@ -187,22 +187,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "984A5395-6F14-4506-A971-A0BD08B99373"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CalendarSample/CalendarView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "140"
-            endingLineNumber = "140"
-            landmarkName = "moveScroll(scrollView:isFinish:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "5561F2BE-D8CC-4C67-8359-1350AA3217AD"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -210,9 +194,9 @@
             filePath = "CalendarSample/CalendarMonthContainerCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "169"
-            endingLineNumber = "169"
-            landmarkName = "moveScroll(pointY:isFinish:)"
+            startingLineNumber = "163"
+            endingLineNumber = "163"
+            landmarkName = "getModeHeight(status:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -226,105 +210,41 @@
             filePath = "CalendarSample/CalendarMonthContainerCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "183"
-            endingLineNumber = "183"
-            landmarkName = "moveScroll(pointY:isFinish:)"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
+            landmarkName = "maxHeight(cellHeight:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "25F426E0-EBE5-4C83-9A82-582134AD3671"
+            uuid = "AAEE194A-210D-492B-8E53-71953EAECDD0"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CalendarSample/CalendarWeekCell.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "58"
+            endingLineNumber = "58"
+            landmarkName = "changeAlpha(alpha:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F087E1D8-534C-487E-8DD6-CBA1BE3704FB"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarSample/CalendarView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "134"
-            endingLineNumber = "134"
-            landmarkName = "moveScroll(scrollView:isFinish:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "9FA8A1B9-B4FF-48B6-8B2D-77CAEB98D20E"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CalendarSample/CalendarView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
-            landmarkName = "moveScroll(scrollView:isFinish:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "9FA8A1B9-B4FF-48B6-8B2D-77CAEB98D20E - dead68701722c5db"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CalendarSample.CalendarView.moveScroll(scrollView: __C.UIScrollView, isFinish: Swift.Bool) -&gt; ()"
-                  moduleName = "CalendarSample"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/murf/Desktop/Source/TEST/CalendarSample/CalendarSample/CalendarSample/CalendarView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "122"
-                  endingLineNumber = "122"
-                  offsetFromSymbolStart = "1628">
-               </Location>
-               <Location
-                  uuid = "9FA8A1B9-B4FF-48B6-8B2D-77CAEB98D20E - dead68701722c5db"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CalendarSample.CalendarView.moveScroll(scrollView: __C.UIScrollView, isFinish: Swift.Bool) -&gt; ()"
-                  moduleName = "CalendarSample"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/murf/Desktop/Source/TEST/CalendarSample/CalendarSample/CalendarSample/CalendarView.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "122"
-                  endingLineNumber = "122"
-                  offsetFromSymbolStart = "1672">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "D3870777-9304-47F9-BCEC-6F6CB56FE411"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CalendarSample/CalendarMonthContainerCell.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "231"
-            endingLineNumber = "231"
-            landmarkName = "reloadCurrent(cell:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "58AA1192-0E07-4199-BDCD-CA34D356FC59"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CalendarSample/CalendarView.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
-            landmarkName = "moveScroll(scrollView:isFinish:)"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
+            landmarkName = "setup(selectDate:type:width:cellHeight:callbackSelect:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
