@@ -10,14 +10,16 @@ import UIKit
 class CalendarEventCell: UICollectionViewCell {
 
     @IBOutlet weak var label: UILabel!
+    var data: ArtistNewsEventObject?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
     }
     
-    func setup(row: Int) {
+    func setup(data: ArtistNewsEventObject?) {
         self.backgroundColor = .yellow
-        label.text = "\(row)"
+        label.text = data?.title ?? ""
     }
 
 }

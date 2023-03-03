@@ -14,7 +14,7 @@ import RxGesture
 class CalendarView: UIView {
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var arrayEvent: [ArtistNewsEventObject] = []
+    var arrayEvent: [ArtistNewsEventObject]?
     var calendarCellHeight: CGFloat = 0.0
     
     var callbackSelect: ((Date?) -> Void)?
@@ -58,8 +58,10 @@ class CalendarView: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-//        for i in 0...2 {
-//            self.arrayEvent.append("\(i)")
+//        for i in 0...5 {
+//            let data = ArtistNewsEventObject()
+//            data.identifier = i
+//            self.arrayEvent.append(data)
 //        }
         
         self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MonthCell")
@@ -98,6 +100,7 @@ class CalendarView: UIView {
         self.cellHeight = cellHeight
         self.calendarType = type
         self.date = selectDate ?? Date()
+        self.arrayEvent = events
         
         switch type {
         case .monthAndWeek:
@@ -208,7 +211,7 @@ class CalendarView: UIView {
     func checkBottomMargin() {
         if self.calendarType == .monthAndWeek {
             //week 모드 height
-            let eventCount = CGFloat(self.arrayEvent.count)
+            let eventCount = CGFloat(self.arrayEvent?.count ?? 1)
             let space = (self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumLineSpacing ?? 0.0
             let eventHeight = eventCount == 0 ? 1 * EVENT_HEIGHT : eventCount * EVENT_HEIGHT
             let otherHeight = HEADER_HEIGHT + eventHeight + space * (eventCount == 0 ? 1 : eventCount)
@@ -257,11 +260,10 @@ extension CalendarView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if self.calendarType == .monthAndWeek {
-            let count = self.arrayEvent.count == 0 ? 1 : self.arrayEvent.count
-            return count + 1
-        } else {
-            return 1
+            let count = self.arrayEvent?.count ?? 1
+            return (count == 0 ? 1 : count) + 1
         }
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -280,7 +282,9 @@ extension CalendarView: UICollectionViewDataSource {
             }
         } else {
             let cell = collectionView.dequeueReusableCell(type: CalendarEventCell.self, indexPath: indexPath)
-            cell.setup(row: indexPath.row)
+//            cell.setup(row: indexPath.row)
+            let data = self.arrayEvent?[indexPath.row - 1]
+            cell.setup(data: data)
             return cell
         }
     }

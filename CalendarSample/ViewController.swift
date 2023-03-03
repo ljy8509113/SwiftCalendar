@@ -21,7 +21,7 @@ class ViewController: UIViewController {
             do {
                 let jsonStr = try String(contentsOfFile: path)
                 
-                    let obj = ArtistNewsChannelObject(JSONString: jsonStr)
+                    let obj = ArtistNewsCalendarObject(JSONString: jsonStr)
                     events = obj?.events
                     print("")
                 
