@@ -67,12 +67,12 @@ class CalendarDayView: UIView {
                 if isToday() {
                     self.backgroundColor = .green
                 } else {
-                    self.backgroundColor = .clear
+                    self.backgroundColor = .white
                 }
             }
         } else {
             labelDay.textColor = .black.withAlphaComponent(0.5)
-            self.backgroundColor = .clear
+            self.backgroundColor = .white
         }
     }
     

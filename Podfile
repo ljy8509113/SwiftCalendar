@@ -8,7 +8,7 @@ target 'CalendarSample' do
   # Pods for CalendarSample
   pod 'RxSwift'
   pod 'RxCocoa'
-  pod 'SnapKit'
+  pod 'Cartography'
   pod 'RxGesture'
   pod 'ObjectMapper'
   pod 'SwiftDate'

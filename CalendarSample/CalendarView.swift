@@ -8,11 +8,12 @@
 import UIKit
 import RxCocoa
 import RxSwift
-import SnapKit
+import Cartography
 import RxGesture
 
 class CalendarView: UIView {
-    @IBOutlet weak var collectionView: UICollectionView!
+//    @IBOutlet weak var collectionView: UICollectionView!
+    var collectionView: UICollectionView?
     
     var arrayEvent: [ArtistNewsEventObject]?
     var calendarCellHeight: CGFloat = 0.0
@@ -33,22 +34,22 @@ class CalendarView: UIView {
     let EVENT_HEIGHT = 100.0
     let HEADER_HEIGHT = 90.0
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        initialize()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        initialize()
-    }
-    
-    func initialize() {
-        if self.subviews.count == 0, let view = Bundle.main.loadNibNamed("\(CalendarView.self)", owner: self)?.first as? UIView {
-            self.addSubview(view)
-            view.frame = self.bounds
-        }
-    }
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        initialize()
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        super.init(coder: coder)
+//        initialize()
+//    }
+//
+//    func initialize() {
+//        if self.subviews.count == 0, let view = Bundle.main.loadNibNamed("\(CalendarView.self)", owner: self)?.first as? UIView {
+//            self.addSubview(view)
+//            view.frame = self.bounds
+//        }
+//    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -57,23 +58,12 @@ class CalendarView: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-//        for i in 0...5 {
-//            let data = ArtistNewsEventObject()
-//            data.identifier = i
-//            self.arrayEvent.append(data)
-//        }
-        
-        self.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MonthCell")
-        self.collectionView.registerNib(type: CalendarWeekContainerCell.self)
-        self.collectionView.registerNib(type: CalendarMonthContainerCell.self)
-        self.collectionView.registerNib(type: CalendarEventCell.self)
-        self.collectionView.register(UINib(nibName: "\(CalendarHeaderReusableView.self)", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "\(CalendarHeaderReusableView.self)")
-        
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-        
-//        self.collectionView.bounces = false
+        self.arrayEvent = []
+        for i in 0...5 {
+            let data = ArtistNewsEventObject()
+            data.identifier = i
+            self.arrayEvent!.append(data)
+        }
         
         let flow = UICollectionViewFlowLayout()
         flow.minimumLineSpacing = 10.0
@@ -81,10 +71,32 @@ class CalendarView: UIView {
         flow.scrollDirection = .vertical
         flow.sectionHeadersPinToVisibleBounds = true
         
-        //        let flow = CalendarCollectionViewFlowLayout(stickyIndexPath: self.stickyIndexPath)
-        self.collectionView.collectionViewLayout = flow
+        self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: flow)
+        self.addSubview(self.collectionView!)
         
-        self.collectionView.rx.panGesture().bind(with: self, onNext: { [weak self] obj, gesture in
+        Cartography.constrain(self.collectionView!) { v in
+            v.leading == v.superview!.leading
+            v.top == v.superview!.top
+            v.trailing == v.superview!.trailing
+            v.bottom == v.superview!.bottom
+        }
+        
+        self.collectionView?.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "MonthCell")
+        self.collectionView?.registerNib(type: CalendarWeekContainerCell.self)
+//        self.collectionView?.registerNib(type: CalendarMonthContainerCell.self)
+        self.collectionView?.register(CalendarMonthContainerCell.self, forCellWithReuseIdentifier: "\(CalendarMonthContainerCell.self)")
+        self.collectionView?.registerNib(type: CalendarEventCell.self)
+        self.collectionView?.register(UINib(nibName: "\(CalendarHeaderReusableView.self)", bundle: nil), forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "\(CalendarHeaderReusableView.self)")
+        
+        self.collectionView?.delegate = self
+        self.collectionView?.dataSource = self
+        self.collectionView?.backgroundColor = .clear
+//        self.collectionView.bounces = false
+        
+        //        let flow = CalendarCollectionViewFlowLayout(stickyIndexPath: self.stickyIndexPath)
+//        self.collectionView.collectionViewLayout = flow
+        
+        self.collectionView?.rx.panGesture().bind(with: self, onNext: { [weak self] obj, gesture in
             self?.isGestureDown = gesture.velocity(in: self).y > 0.0
             //            print(" :: \(self?.isGestureDown)")
         }).disposed(by: self.disposeBag)
@@ -100,22 +112,23 @@ class CalendarView: UIView {
         self.cellHeight = cellHeight
         self.calendarType = type
         self.date = selectDate ?? Date()
-        self.arrayEvent = events
+//        self.arrayEvent = events
         
         switch type {
         case .monthAndWeek:
             self.calendarCellHeight = monthHeight(date: self.date) //+ Common.TOP_HEIGHT
             
             if self.weekContainerCell == nil {
-                self.weekContainerCell = Bundle.main.loadNibNamed("\(CalendarWeekContainerCell.self)", owner: self)?.first as? CalendarWeekContainerCell
+//                self.weekContainerCell = Bundle.main.loadNibNamed("\(CalendarWeekContainerCell.self)", owner: self)?.first as? CalendarWeekContainerCell
+                self.weekContainerCell = CalendarWeekContainerCell(frame: CGRect(x: 0.0, y: 0.0, width: width, height: self.cellHeight))
             }
         case .onlyWeek:
             self.calendarCellHeight = self.cellHeight
-            self.collectionView.isScrollEnabled = false
+            self.collectionView?.isScrollEnabled = false
             self.weekData = CalendarWeekObject(date: self.date, array: nil)
         case .onlyMonth:
             self.calendarCellHeight = monthHeight(date: self.date)
-            self.collectionView.isScrollEnabled = false
+            self.collectionView?.isScrollEnabled = false
         }
     }
     
@@ -163,15 +176,15 @@ class CalendarView: UIView {
                     if self.isGestureDown == true {
                         if current < monthHeight {
                             let y = 0.0
-                            self.collectionView.isUserInteractionEnabled = false
-                            self.collectionView.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
+                            self.collectionView?.isUserInteractionEnabled = false
+                            self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
                             print("111 - isUserInteractionEnabled false")
                         }
                     } else {
                         if current > self.cellHeight {
                             let y = monthHeight - weekHeight
-                            self.collectionView.isUserInteractionEnabled = false
-                            self.collectionView.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
+                            self.collectionView?.isUserInteractionEnabled = false
+                            self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
                             print("222 - isUserInteractionEnabled false")
                         }
                     }
@@ -186,14 +199,14 @@ class CalendarView: UIView {
                     frame.origin.y = HEADER_HEIGHT
                     frame.origin.x = 0.0
                     weekCell.frame = frame
-                    self.collectionView.isUserInteractionEnabled = true
+                    self.collectionView?.isUserInteractionEnabled = true
                     print("333 - isUserInteractionEnabled true")
                 }
             } else {
                 if offset.y <= 0.0, !isFinish, self.weekContainerCell?.isHidden == false {
                     self.weekContainerCell?.isHidden = true
-                    cell.collectionView.reloadData()
-                    self.collectionView.isUserInteractionEnabled = true
+                    cell.collectionView?.reloadData()
+                    self.collectionView?.isUserInteractionEnabled = true
                     print("444 - isUserInteractionEnabled true")
                 }
             }
@@ -212,7 +225,7 @@ class CalendarView: UIView {
         if self.calendarType == .monthAndWeek {
             //week 모드 height
             let eventCount = CGFloat(self.arrayEvent?.count ?? 1)
-            let space = (self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumLineSpacing ?? 0.0
+            let space = (self.collectionView?.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumLineSpacing ?? 0.0
             let eventHeight = eventCount == 0 ? 1 * EVENT_HEIGHT : eventCount * EVENT_HEIGHT
             let otherHeight = HEADER_HEIGHT + eventHeight + space * (eventCount == 0 ? 1 : eventCount)
             let weekHeight = otherHeight + self.cellHeight
@@ -224,7 +237,7 @@ class CalendarView: UIView {
             if monthHeight > height && weekHeight < height {
                 bottom = height - weekHeight
             }
-            self.collectionView.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: bottom, right: 0.0)
+            self.collectionView?.contentInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: bottom, right: 0.0)
         }
     }
     
@@ -274,7 +287,8 @@ extension CalendarView: UICollectionViewDataSource {
                 return cell
             } else {
                 if self.monthContainerCell == nil {
-                    self.monthContainerCell = collectionView.dequeueReusableCell(type: CalendarMonthContainerCell.self, indexPath: indexPath)
+//                    self.monthContainerCell = collectionView.dequeueReusableCell(type: CalendarMonthContainerCell.self, indexPath: indexPath)
+                    self.monthContainerCell = (collectionView.dequeueReusableCell(withReuseIdentifier: "\(CalendarMonthContainerCell.self)", for: indexPath) as! CalendarMonthContainerCell)
                     self.monthContainerCell?.setup(delegate: self, cellHeight: self.cellHeight)
                 }
 
@@ -304,7 +318,7 @@ extension CalendarView: UICollectionViewDataSource {
                     case .onlyWeek:
                         if let cell = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as? CalendarWeekContainerCell {
                             cell.setArray(date: date)
-                            cell.collectionView.reloadData()
+                            cell.collectionView?.reloadData()
                         }
                     case .onlyMonth:
                         self?.monthContainerCell?.moveDate(date: date)
@@ -365,19 +379,19 @@ extension CalendarView: CalendarDelegate {
     func changeHeight(height: CGFloat) {
         if self.calendarCellHeight != height {
             print("changeHeight: current: \(self.calendarCellHeight) :: chage: \(height)")
-            if self.collectionView.contentOffset.y > 0.0 {
+            if self.collectionView?.contentOffset.y ?? 0.0 > 0.0 {
                 let gab = height - self.calendarCellHeight
-                self.monthContainerCell?.constraintTop.constant += gab
+                self.monthContainerCell?.constraintTop?.constant += gab
             }
             self.calendarCellHeight = height
-            self.collectionView.collectionViewLayout.invalidateLayout()
+            self.collectionView?.collectionViewLayout.invalidateLayout()
             
             checkBottomMargin()
         }
     }
     
     func changeWeek(date: Date) {
-        if let header = self.collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(row: 0, section: 0)) as? CalendarHeaderReusableView {
+        if let header = self.collectionView?.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(row: 0, section: 0)) as? CalendarHeaderReusableView {
             header.update(date: date)
         }
     }

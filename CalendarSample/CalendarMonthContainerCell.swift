@@ -6,14 +6,17 @@
 //
 
 import UIKit
-import RxCocoa
-import RxSwift
+import Cartography
 
 class CalendarMonthContainerCell: UICollectionViewCell {
     
-    @IBOutlet weak var constraintTop: NSLayoutConstraint!
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var constraintCollectionHeight: NSLayoutConstraint!
+//    @IBOutlet weak var constraintTop: NSLayoutConstraint!
+//    @IBOutlet weak var collectionView: UICollectionView!
+//    @IBOutlet weak var constraintCollectionHeight: NSLayoutConstraint!
+    
+    var collectionView: UICollectionView?
+    var constraintTop: NSLayoutConstraint?
+    var constraintCollectionHeight: NSLayoutConstraint?
     
     var arrayMonth: [CalendarMonthObject] = []
     var cellHeight: CGFloat = Common.CELL_HEIGHT
@@ -24,25 +27,45 @@ class CalendarMonthContainerCell: UICollectionViewCell {
     
     var delegate: CalendarDelegate?
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initialize()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        initialize()
+    }
+    
+    func initialize() {
+        if self.collectionView == nil {
+            self.backgroundColor = .clear
+            let flow = UICollectionViewFlowLayout()
+            flow.scrollDirection = .horizontal
+            flow.minimumLineSpacing = 0.0
+            flow.minimumInteritemSpacing = 0.0
+            
+            self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: flow)
+            self.contentView.addSubview(self.collectionView!)
+            self.collectionView?.backgroundColor = .clear
+            Cartography.constrain(self.collectionView!) { [weak self] (v) in
+                self?.constraintTop = v.top == v.superview!.top
+                self?.constraintCollectionHeight = v.height == 300
+                v.leading == v.superview!.leading
+                v.trailing == v.superview!.trailing
+            }
+            
+            self.collectionView?.delegate = self
+            self.collectionView?.dataSource = self
+//            self.collectionView?.registerNib(type: CalendarMonthCell.self)
+            self.collectionView?.register(CalendarMonthCell.self, forCellWithReuseIdentifier: "\(CalendarMonthCell.self)")
+            self.collectionView?.isPagingEnabled = true
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
-//        self.formatter.dateFormat = "yyyyMM"
-        
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-        self.collectionView.registerNib(type: CalendarMonthCell.self)
-        self.collectionView.isPagingEnabled = true
-        //        self.collectionView.tag = 1
-        
-        let flow = UICollectionViewFlowLayout()
-        flow.scrollDirection = .horizontal
-        flow.minimumLineSpacing = 0.0
-        flow.minimumInteritemSpacing = 0.0
-        //        flow.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        self.collectionView.collectionViewLayout = flow
-        
     }
     
     func setup(delegate: CalendarDelegate,
@@ -54,7 +77,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         
         setArray(date: selectedDate())
         
-        self.constraintCollectionHeight.constant = self.cellHeight * 6.0
+        self.constraintCollectionHeight?.constant = self.cellHeight * 6.0
     }
     
     func setArray(date: Date){
@@ -74,15 +97,15 @@ class CalendarMonthContainerCell: UICollectionViewCell {
     }
     
     func scrollToIndex(index: Int, isAnimation: Bool = false) {
-        let width = collectionView.frame.size.width
+        let width = self.collectionView?.frame.size.width ?? .zero
         var x = width
         
         if index == 0 {
             x = 0.0
         } else if index == 2 {
-            x = collectionView.contentSize.width - width
+            x = (self.collectionView?.contentSize.width ?? 0.0) - width
         }
-        self.collectionView.setContentOffset(CGPoint(x: x, y: 0.0), animated: isAnimation)
+        self.collectionView?.setContentOffset(CGPoint(x: x, y: 0.0), animated: isAnimation)
     }
     
     func scrollToCenter(scrollView: UIScrollView) {
@@ -92,13 +115,13 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         } else if x > scrollView.frame.size.width {
             setNextMonth()
         }
-        self.collectionView.reloadData()
+        self.collectionView?.reloadData()
         scrollToIndex(index: 1)
         
         let height = monthCollectionViewHeight(index: 1)
         changeHeight(height: height)
         
-        self.collectionView.performBatchUpdates({ [weak self] in
+        self.collectionView?.performBatchUpdates({ [weak self] in
             guard let strongSelf = self else {
                 return
             }
@@ -145,17 +168,16 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         }
         
         cell.moveScroll(pointY: pointY, isFinish: isFinish)
-        self.constraintTop.constant = pointY
-//        self.layoutIfNeeded()
+        self.constraintTop?.constant = pointY
         
         let monthHeight = monthCollectionViewHeight(index: 1)
         if pointY == monthHeight - self.cellHeight {
-            self.collectionView.isScrollEnabled = false
+            self.collectionView?.isScrollEnabled = false
         } else if pointY == 0.0 {
-            self.collectionView.isScrollEnabled = true
-            self.collectionView.reloadData()
+            self.collectionView?.isScrollEnabled = true
+            self.collectionView?.reloadData()
         } else {
-            self.collectionView.isScrollEnabled = false
+            self.collectionView?.isScrollEnabled = false
         }
     }
 
@@ -178,7 +200,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
     }
     
     func currentCollectionViewHeight() -> CGFloat {
-        if let cell = self.collectionView.cellForItem(at: IndexPath(row: 1, section: 0)) as? CalendarMonthCell {
+        if let cell = self.collectionView?.cellForItem(at: IndexPath(row: 1, section: 0)) as? CalendarMonthCell {
             return cell.visibleCellsHeight()
         }
         return .zero
@@ -197,7 +219,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
     }
     
     func currentCell() -> CalendarMonthCell? {
-        return self.collectionView.visibleCells.first(where: { $0.tag == 1}) as? CalendarMonthCell
+        return self.collectionView?.visibleCells.first(where: { $0.tag == 1}) as? CalendarMonthCell
     }
     
     func reloadCurrent(cell: CalendarWeekContainerCell) {
@@ -208,8 +230,8 @@ class CalendarMonthContainerCell: UICollectionViewCell {
     
     func moveDate(date: Date) {
         setArray(date: date)
-        self.collectionView.reloadData()
-        self.collectionView.performBatchUpdates({}, completion: { [weak self] _ in
+        self.collectionView?.reloadData()
+        self.collectionView?.performBatchUpdates({}, completion: { [weak self] _ in
             guard let strongSelf = self else {
                 return
             }
@@ -243,7 +265,8 @@ extension CalendarMonthContainerCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(type: CalendarMonthCell.self, indexPath: indexPath)
+//        let cell = collectionView.dequeueReusableCell(type: CalendarMonthCell.self, indexPath: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CalendarMonthCell.self)", for: indexPath) as! CalendarMonthCell
         let data = self.arrayMonth[indexPath.row]
         cell.tag = indexPath.row
 //        cell.setup(status: self.status, data: data, selectDate: self.selectDate, cellHeight: self.cellHeight, delegate: self)

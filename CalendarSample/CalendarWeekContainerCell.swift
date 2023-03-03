@@ -6,12 +6,14 @@
 //
 
 import UIKit
-import RxCocoa
-import RxSwift
+import Cartography
 
 class CalendarWeekContainerCell: UICollectionViewCell {
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var constraintHeight: NSLayoutConstraint!
+//    @IBOutlet weak var collectionView: UICollectionView!
+//    @IBOutlet weak var constraintHeight: NSLayoutConstraint!
+    
+    var collectionView: UICollectionView?
+    var constraintHeight: NSLayoutConstraint?
     
     var calendar = Calendar.current
     var cellHeight: CGFloat = 0.0
@@ -22,27 +24,47 @@ class CalendarWeekContainerCell: UICollectionViewCell {
     var delegate: CalendarDelegate?
     var isInit: Bool = true
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initialize()
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-        
-        self.collectionView.registerNib(type: CalendarWeekCell.self)
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-        self.collectionView.isPagingEnabled = true
-        
-        let flow = UICollectionViewFlowLayout()
-        flow.scrollDirection = .horizontal
-        flow.minimumLineSpacing = 0.0
-        flow.minimumInteritemSpacing = 0.0
-        flow.sectionInset = .zero
-        
-        self.collectionView.collectionViewLayout = flow
-        self.backgroundColor = .cyan
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        initialize()
+    }
+    
+    func initialize() {
+        if self.collectionView == nil {
+            self.backgroundColor = .clear
+            let flow = UICollectionViewFlowLayout()
+            flow.scrollDirection = .horizontal
+            flow.minimumLineSpacing = 0.0
+            flow.minimumInteritemSpacing = 0.0
+            flow.sectionInset = .zero
+            
+            self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: flow)
+            self.contentView.addSubview(self.collectionView!)
+            self.collectionView?.backgroundColor = .clear
+            Cartography.constrain(self.collectionView!) { [weak self] (v) in
+                self?.constraintHeight = v.height == 60.0
+                v.top == v.superview!.top
+                v.leading == v.superview!.leading
+                v.trailing == v.superview!.trailing
+            }
+            
+//            self.collectionView?.registerNib(type: CalendarWeekCell.self)
+            self.collectionView?.register(CalendarWeekCell.self, forCellWithReuseIdentifier: "\(CalendarWeekCell.self)")
+            self.collectionView?.delegate = self
+            self.collectionView?.dataSource = self
+            self.collectionView?.isPagingEnabled = true
+            
+            self.backgroundColor = .cyan
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
     }
     
     func setup(data: CalendarWeekObject?,
@@ -52,12 +74,12 @@ class CalendarWeekContainerCell: UICollectionViewCell {
         self.delegate = delegate
         self.data = data
         self.cellHeight = cellHeight
-        self.constraintHeight.constant = cellHeight
+        self.constraintHeight?.constant = cellHeight
         
         if let date = data?.date {
             setArray(date: date)
-            self.collectionView.reloadData()
-            self.collectionView.performBatchUpdates({}, completion: { [weak self] result in
+            self.collectionView?.reloadData()
+            self.collectionView?.performBatchUpdates({}, completion: { [weak self] result in
                 if self?.isInit == false {
                     self?.scrollToIndex(index: 1)
                 }
@@ -98,15 +120,15 @@ class CalendarWeekContainerCell: UICollectionViewCell {
     }
     
     func scrollToIndex(index: Int, isAnimation: Bool = false) {
-        let width = collectionView.frame.size.width
+        let width = self.collectionView?.frame.size.width ?? 0.0
         var x = width
         
         if index == 0 {
             x = 0.0
         } else if index == 2 {
-            x = collectionView.contentSize.width - width
+            x = (self.collectionView?.contentSize.width ?? 0.0) - width
         }
-        self.collectionView.setContentOffset(CGPoint(x: x, y: 0.0), animated: isAnimation)
+        self.collectionView?.setContentOffset(CGPoint(x: x, y: 0.0), animated: isAnimation)
     }
     
     func scrollToCenter(scrollView: UIScrollView, isNoti: Bool) {
@@ -117,10 +139,10 @@ class CalendarWeekContainerCell: UICollectionViewCell {
             setNextWeek()
         }
         
-        self.collectionView.reloadData()
+        self.collectionView?.reloadData()
         scrollToIndex(index: 1)
         
-        self.collectionView.performBatchUpdates({}, completion: { [weak self] result in
+        self.collectionView?.performBatchUpdates({}, completion: { [weak self] result in
             if isNoti {
                 if let selectDate = self?.arrayWeek[1].date {
                     self?.delegate?.changeWeek(date: selectDate)
@@ -133,9 +155,9 @@ class CalendarWeekContainerCell: UICollectionViewCell {
     func setSelectDay(date: Date?) {
         if let select = date {
             self.delegate?.selectDate(date: select)
-            self.collectionView.visibleCells.forEach({
+            self.collectionView?.visibleCells.forEach({
                 if let cell = $0 as? CalendarWeekCell {
-                    cell.stackView.subviews.forEach({
+                    cell.stackView?.subviews.forEach({
                         if let view = $0 as? CalendarDayView, let viewDate = view.data?.date {
                             view.setSelectDay(isSelect: self.delegate?.selectedDate().isSameDate(date: viewDate) == true)
                         }
@@ -149,8 +171,8 @@ class CalendarWeekContainerCell: UICollectionViewCell {
         if let weekOfFirstDay = self.calendar.startDayOfWeek(date: date) {
             self.data?.update(date: weekOfFirstDay)
             setArray(date: weekOfFirstDay)
-            self.collectionView.reloadData()
-            self.collectionView.performBatchUpdates({}, completion: { [weak self] _ in
+            self.collectionView?.reloadData()
+            self.collectionView?.performBatchUpdates({}, completion: { [weak self] _ in
                 self?.scrollToIndex(index: 1)
                 self?.setSelectDay(date: date)
             })
@@ -166,7 +188,8 @@ extension CalendarWeekContainerCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(type: CalendarWeekCell.self, indexPath: indexPath)
+//        let cell = collectionView.dequeueReusableCell(type: CalendarWeekCell.self, indexPath: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CalendarWeekCell.self)", for: indexPath) as! CalendarWeekCell
         let data = self.arrayWeek[indexPath.row]
         cell.tag = indexPath.row
 //        cell.setup(array: data.arrayDays, cellHeight: self.cellHeight, delegate: delegate)
