@@ -8,6 +8,16 @@
 import UIKit
 import Cartography
 
+protocol CalendarProtocol {
+    func changeHeight(height: CGFloat)
+    func changeWeek(date: Date)
+    func startedDate() -> Date?
+    func selectDate(date: Date)
+    func selectedDate() -> Date
+    func status() -> CalendarStatus
+    func type() -> CalendarType?
+}
+
 class CalendarView: UIView {
     var collectionView: UICollectionView?
     
@@ -29,13 +39,19 @@ class CalendarView: UIView {
     let EVENT_HEIGHT = 100.0
     let HEADER_HEIGHT = 90.0
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        checkBottomMargin()
+    var startDate: Date?
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initialize()
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        initialize()
+    }
+    
+    func initialize() {
         self.arrayEvent = []
         for i in 0...5 {
             let data = ArtistNewsEventObject()
@@ -62,7 +78,7 @@ class CalendarView: UIView {
         
         self.collectionView?.registerNib(type: CalendarWeekContainerCell.self)
         self.collectionView?.registerNib(type: CalendarMonthContainerCell.self)
-        self.collectionView?.registerNib(type: CalendarEventCell.self)
+        self.collectionView?.registerNib(type: ANEventCell.self)
         
         self.collectionView?.delegate = self
         self.collectionView?.dataSource = self
@@ -73,6 +89,16 @@ class CalendarView: UIView {
         self.addGestureRecognizer(panGesture)
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        checkBottomMargin()
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+    }
+    
     @objc func panAction(_ sender: UIPanGestureRecognizer) {
         let velocity = sender.velocity(in: self.collectionView!)
         if abs(velocity.y) > abs(velocity.x) {
@@ -80,7 +106,8 @@ class CalendarView: UIView {
         }
     }
     
-    func setup(selectDate: Date?,
+    func setup(startDate: Date?,
+               selectDate: Date?,
                type: CalendarType,
                events: [ArtistNewsEventObject]?,
                width: CGFloat = UIScreen.main.bounds.width,
@@ -91,6 +118,7 @@ class CalendarView: UIView {
         self.cellHeight = cellHeight
         self.calendarType = type
         self.date = selectDate ?? Date()
+        self.startDate = startDate
 //        self.arrayEvent = events
         
         switch type {
@@ -124,13 +152,13 @@ class CalendarView: UIView {
                 }
 
                 if offset.y > 0.0, current == monthHeight {
-                    //month -> week 스크롤 시작
+                    // month -> week 스크롤 시작
                     weekCell.isHidden = false
                     cell.changeWeekView(cell: weekCell)
                 }
 
                 if self.subviews.count > 1, offset.y < max {
-                    //week -> month 스트롤 시작
+                    // week -> month 스트롤 시작
                     cell.reloadCurrent(cell: weekCell)
                 }
 
@@ -147,7 +175,7 @@ class CalendarView: UIView {
             }
 
             if isFinish {
-                //유저가 스크롤에서 손을 때거나 Decelerating 되었을때
+                // 유저가 스크롤에서 손을 때거나 Decelerating 되었을때
                 if offset.y > 0, offset.y <= max {
                     let monthHeight = cell.monthCollectionViewHeight(index: 1)
                     let weekHeight = cell.cellHeight
@@ -171,7 +199,7 @@ class CalendarView: UIView {
 
             if offset.y >= max {
                 if self.subviews.count == 1 {
-                    //week
+                    // week
                     self.addSubview(weekCell)
                     var frame = weekCell.frame
                     frame.origin.y = HEADER_HEIGHT
@@ -201,7 +229,7 @@ class CalendarView: UIView {
     
     func checkBottomMargin() {
         if self.calendarType == .monthAndWeek {
-            //week 모드 height
+            // week 모드 height
             let eventCount = CGFloat(self.arrayEvent?.count ?? 1)
             let space = (self.collectionView?.collectionViewLayout as? UICollectionViewFlowLayout)?.minimumLineSpacing ?? 0.0
             let eventHeight = eventCount == 0 ? 1 * EVENT_HEIGHT : eventCount * EVENT_HEIGHT
@@ -298,8 +326,7 @@ extension CalendarView: UICollectionViewDataSource {
                             default:
                                 break
                             }
-                        case .previous: fallthrough
-                        case .next:
+                        case .previous, .next:
                             let index = move == .next ? 2 : 0
                             if self?.status() == .week {
                                 switch self?.calendarType {
@@ -315,7 +342,6 @@ extension CalendarView: UICollectionViewDataSource {
                             } else {
                                 self?.monthContainerCell?.scrollToIndex(index: index, isAnimation: true)
                             }
-                            break
                         }
                         
                     })
@@ -324,7 +350,7 @@ extension CalendarView: UICollectionViewDataSource {
                 return self.monthContainerCell!
             }
         } else {
-            let cell = collectionView.dequeueReusableCell(type: CalendarEventCell.self, indexPath: indexPath)
+            let cell = collectionView.dequeueReusableCell(type: ANEventCell.self, indexPath: indexPath)
 //            cell.setup(row: indexPath.row)
             let data = self.arrayEvent?[indexPath.row - 1]
             cell.setup(data: data)
@@ -359,10 +385,14 @@ extension CalendarView: CalendarProtocol {
     func changeWeek(date: Date) {
     }
     
+    func startedDate() -> Date? {
+        return self.startDate
+    }
+    
     func selectDate(date: Date) {
         self.date = date
         self.callbackSelect?(date)
-        //TODO: 이벤트목록
+        // TODO: 이벤트목록
     }
     
     func selectedDate() -> Date {
@@ -371,7 +401,7 @@ extension CalendarView: CalendarProtocol {
     
     func status() -> CalendarStatus {
         switch self.calendarType {
-        case .onlyWeek :
+        case .onlyWeek:
             return .week
         case .onlyMonth:
             return .month
@@ -381,9 +411,9 @@ extension CalendarView: CalendarProtocol {
             let weekHeight = self.monthContainerCell?.getModeHeight(status: .week)
             
             switch currentHeight {
-            case monthHeight :
+            case monthHeight:
                 return .month
-            case weekHeight :
+            case weekHeight:
                 return .week
             default:
                 return .changing

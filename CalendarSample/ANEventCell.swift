@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CalendarEventCell: UICollectionViewCell {
+class ANEventCell: UICollectionViewCell {
 
     @IBOutlet weak var label: UILabel!
     var data: ArtistNewsEventObject?

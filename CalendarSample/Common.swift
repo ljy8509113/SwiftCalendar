@@ -25,15 +25,6 @@ enum CalendarType {
     case monthAndWeek
 }
 
-protocol CalendarProtocol {
-    func changeHeight(height: CGFloat)
-    func changeWeek(date: Date)
-    func selectDate(date: Date)
-    func selectedDate() -> Date
-    func status() -> CalendarStatus
-    func type() -> CalendarType?
-}
-
 class Common: NSObject {
     static let CELL_HEIGHT = 60.0
 }

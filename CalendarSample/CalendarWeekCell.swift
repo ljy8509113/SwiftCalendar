@@ -12,6 +12,7 @@ class CalendarWeekCell: UICollectionViewCell {
     var stackView: UIStackView?
     var arrayDays: [CalendarDayObject] = []
     var callbackOnClick: ((Date?) -> Void)?
+    var delegate: CalendarProtocol?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,9 +50,9 @@ class CalendarWeekCell: UICollectionViewCell {
         super.prepareForReuse()
     }
     
-    func setup(type: CalendarType?, selectDate: Date?, array: [CalendarDayObject], cellHeight: CGFloat, callbackOnClick: ((Date?) -> Void)? ) {
+    func setup(delegate: CalendarProtocol?, array: [CalendarDayObject], cellHeight: CGFloat, callbackOnClick: ((Date?) -> Void)? ) {
         self.arrayDays = array
-        
+        self.delegate = delegate
         var subCount = self.stackView?.subviews.count ?? 0
         
         if subCount < 7 {
@@ -60,7 +61,7 @@ class CalendarWeekCell: UICollectionViewCell {
             }
             
             for i in 1...7 {
-                let view = CalendarDayView(type: type)
+                let view = CalendarDayView(delegate: self.delegate)
                 view.tag = i
                 self.stackView?.addArrangedSubview(view)
             }
@@ -70,7 +71,7 @@ class CalendarWeekCell: UICollectionViewCell {
         for i in 0..<array.count {
             if subCount > i, let view = self.stackView?.subviews[i] as? CalendarDayView {
 //                view.setup(data: array[i], cellHeight: cellHeight,  delegate: delegate)
-                view.setup(type: type, selectDate: selectDate, data: array[i], cellHeight: cellHeight, callbackOnClick: callbackOnClick)
+                view.setup(delegate: self.delegate, data: array[i], cellHeight: cellHeight, callbackOnClick: callbackOnClick)
             }
         }
     }

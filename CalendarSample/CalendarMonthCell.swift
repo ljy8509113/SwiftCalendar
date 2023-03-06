@@ -12,7 +12,7 @@ class CalendarMonthCell: UICollectionViewCell {
     var collectionView: UICollectionView?
     
     var data: CalendarMonthObject?
-    var cellHeight: CGFloat = Common.CELL_HEIGHT
+    var cellHeight: CGFloat = 60.0
     
     var selectedRow: Int?
     var movePoint: CGFloat = 0.0
@@ -78,7 +78,7 @@ class CalendarMonthCell: UICollectionViewCell {
         self.cellHeight = cellHeight
         self.delegate = delegate
         
-        if self.delegate?.status() == .month  {
+        if self.delegate?.status() == .month {
             self.selectedRow = nil
         } else {
             self.selectedRow = existSelectedRow()
@@ -149,7 +149,7 @@ class CalendarMonthCell: UICollectionViewCell {
         self.data = data
         self.selectedRow = existSelectedRow()
         self.collectionView?.reloadData()
-        self.collectionView?.performBatchUpdates({}, completion: { [weak self] result in
+        self.collectionView?.performBatchUpdates({}, completion: { [weak self] _ in
             if let count = data?.arrayWeek.count, let cellHeight = self?.cellHeight {
                 self?.changeHeight(height: CGFloat(count) * cellHeight)
             }
@@ -167,7 +167,7 @@ extension CalendarMonthCell: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CalendarWeekCell.self)", for: indexPath) as! CalendarWeekCell
         cell.tag = indexPath.row
         if let weekData = self.data?.arrayWeek[indexPath.row] {
-            cell.setup(type: self.delegate?.type(), selectDate: self.delegate?.selectedDate(), array: weekData.arrayDays, cellHeight: self.cellHeight, callbackOnClick: { [weak self] date in
+            cell.setup(delegate: self.delegate, array: weekData.arrayDays, cellHeight: self.cellHeight, callbackOnClick: { [weak self] date in
                 self?.setSelectDay(date: date)
             })
             
@@ -219,6 +219,10 @@ extension CalendarMonthCell: CalendarProtocol {
     
     func selectedDate() -> Date {
         return self.delegate?.selectedDate() ?? Date()
+    }
+    
+    func startedDate() -> Date? {
+        return self.delegate?.startedDate()
     }
     
     func changeHeight(height: CGFloat) {

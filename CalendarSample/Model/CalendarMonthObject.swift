@@ -8,15 +8,18 @@
 import Foundation
 
 class CalendarMonthObject: NSObject {
+    var startDate: Date?
     var date: Date = Date()
     var calendar = Calendar.current
     
     var arrayWeek: [CalendarWeekObject] = []
+    var formatter = DateFormatter()
     
-    init(date: Date = Date()) {
+    init(date: Date = Date(), startDate: Date?) {
         super.init()
         self.date = date
-        
+        self.startDate = startDate
+        self.formatter.dateFormat = "yyyyMMdd"
         updateDays()
     }
     
@@ -29,9 +32,6 @@ class CalendarMonthObject: NSObject {
         if monthEnd % 7 > 0 {
             rows += 1
         }
-//        let total = rows * 7
-        
-        print("updateDays : \(self.date)")
         
         for i in 0..<rows {
             var array: [CalendarDayObject] = []
@@ -60,6 +60,13 @@ class CalendarMonthObject: NSObject {
                 let month = calendar.component(.month, from: date)
                 
                 let makeDate = calendar.date(from: DateComponents(year: year, month: month, day: day))
+                
+                if let startDate = self.startDate {
+                    let s = Int(self.formatter.string(from: startDate)) ?? 0
+                    let cur = Int(self.formatter.string(from: makeDate ?? Date())) ?? 0
+                    isEnable = s <= cur
+                }
+                
                 let obj = CalendarDayObject(date: makeDate, events: [], isEnable: isEnable)
                 array.append(obj)
             }

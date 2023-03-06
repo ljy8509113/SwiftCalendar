@@ -173,9 +173,7 @@ class CalendarWeekContainerCell: UICollectionViewCell {
                 self?.setSelectDay(date: date)
             })
         }
-        
     }
-    
 }
 
 extension CalendarWeekContainerCell: UICollectionViewDataSource {
@@ -187,7 +185,7 @@ extension CalendarWeekContainerCell: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CalendarWeekCell.self)", for: indexPath) as! CalendarWeekCell
         let data = self.arrayWeek[indexPath.row]
         cell.tag = indexPath.row
-        cell.setup(type: self.delegate?.type(), selectDate: self.delegate?.selectedDate(), array: data.arrayDays, cellHeight: self.cellHeight, callbackOnClick: { [weak self] date in
+        cell.setup(delegate: self.delegate, array: data.arrayDays, cellHeight: self.cellHeight, callbackOnClick: { [weak self] date in
             if let date = date {
                 self?.setSelectDay(date: date)
             }
@@ -223,5 +221,3 @@ extension CalendarWeekContainerCell: UICollectionViewDelegateFlowLayout {
         return CGSize(width: width, height: self.cellHeight)
     }
 }
-
-

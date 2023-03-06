@@ -30,7 +30,8 @@ class ViewController: UIViewController {
             }
         }
         
-        self.calendarView.setup(selectDate: Date(),
+        self.calendarView.setup(startDate: nil,
+                                selectDate: Date(),
                                 type: .onlyMonth,
                                 events: events,
                                 callbackSelect: { [weak self] date in

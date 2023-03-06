@@ -19,7 +19,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
     @IBOutlet weak var labelMonth: UILabel!
     
     var arrayMonth: [CalendarMonthObject] = []
-    var cellHeight: CGFloat = Common.CELL_HEIGHT
+    var cellHeight: CGFloat = 60.0
     
     var isInit: Bool = true
     var formatter = DateFormatter()
@@ -70,7 +70,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         self.constraintCollectionHeight?.constant = self.cellHeight * 6.0
     }
     
-    func setArray(date: Date){
+    func setArray(date: Date) {
         self.arrayMonth.removeAll()
         
         guard let previous = getMonthDate(date: date, addValue: -1), let next = getMonthDate(date: date, addValue: 1) else {
@@ -79,9 +79,9 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         
 //        print("array month pre: \(previous) date : \(date) next: \(next)")
         
-        let previousMonth = CalendarMonthObject(date: previous)
-        let currentMonth = CalendarMonthObject(date: date)
-        let nextMonth = CalendarMonthObject(date: next)
+        let previousMonth = CalendarMonthObject(date: previous, startDate: self.delegate?.startedDate())
+        let currentMonth = CalendarMonthObject(date: date, startDate: self.delegate?.startedDate())
+        let nextMonth = CalendarMonthObject(date: next, startDate: self.delegate?.startedDate())
         
         self.arrayMonth.append(contentsOf: [previousMonth, currentMonth, nextMonth])
     }
@@ -112,7 +112,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         changeHeight(height: height)
         
         self.collectionView?.performBatchUpdates({ [weak self] in
-            guard let strongSelf = self else {
+            guard let strongSelf = self, strongSelf.type() != .onlyMonth else {
                 return
             }
             let select = strongSelf.arrayMonth[1].date
@@ -128,7 +128,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         setArray(date: self.arrayMonth[0].date)
     }
     
-    func setNextMonth()  {
+    func setNextMonth() {
         setArray(date: self.arrayMonth[2].date)
     }
     
@@ -296,7 +296,7 @@ extension CalendarMonthContainerCell: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CalendarMonthContainerCell : CalendarProtocol {
+extension CalendarMonthContainerCell: CalendarProtocol {
     func changeHeight(height: CGFloat) {
         let cellHeight = height + topSize()
         self.delegate?.changeHeight(height: cellHeight)
@@ -306,6 +306,10 @@ extension CalendarMonthContainerCell : CalendarProtocol {
     func changeWeek(date: Date) {
         self.delegate?.changeWeek(date: date)
         setMonthText(date: date)
+    }
+    
+    func startedDate() -> Date? {
+        return self.delegate?.startedDate()
     }
     
     func selectDate(date: Date) {

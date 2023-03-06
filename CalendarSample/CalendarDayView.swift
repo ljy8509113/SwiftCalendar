@@ -17,26 +17,26 @@ class CalendarDayView: UIView {
     
     var data: CalendarDayObject?
     var callbackOnClick:((Date?) -> Void)?
-    var type: CalendarType?
+    var delegate: CalendarProtocol?
     
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        initialize()
-//    }
-//
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         initialize()
     }
 
-    init(type: CalendarType?) {
+//    override init(frame: CGRect) {
+//        super.init(frame: frame)
+//        initialize()
+//    }
+    
+    init(delegate: CalendarProtocol?) {
         super.init(frame: .zero)
-        self.type = type
+        self.delegate = delegate
         initialize()
     }
     
     func initialize() {
-        if self.type != .onlyMonth {
+        if self.delegate?.type() != .onlyMonth {
             self.stackViewEvents = UIStackView(frame: .zero)
             self.addSubview(self.stackViewEvents!)
             Cartography.constrain(self.stackViewEvents!) { (stack) in
@@ -56,7 +56,7 @@ class CalendarDayView: UIView {
         self.addSubview(self.labelDay!)
         
         Cartography.constrain(self.labelDay!) { (label) in
-            if self.type == .onlyMonth {
+            if self.delegate?.type() == .onlyMonth {
                 label.center == label.superview!.center
                 label.width == 20.0
             } else {
@@ -77,19 +77,19 @@ class CalendarDayView: UIView {
         self.button?.addTarget(self, action: #selector(onSelect), for: .touchUpInside)
     }
     
-    func setup(type: CalendarType?, selectDate: Date?, data: CalendarDayObject?, cellHeight: CGFloat, callbackOnClick:((Date?) -> Void)? ) {
+    func setup(delegate: CalendarProtocol?, data: CalendarDayObject?, cellHeight: CGFloat, callbackOnClick:((Date?) -> Void)? ) {
         self.callbackOnClick = callbackOnClick
 //        self.button.setTitle("", for: .normal)
         self.data = data
-        self.type = type
+        self.delegate = delegate
         
         self.labelDay?.text = data?.day() ?? ""
-        if type == .onlyMonth {
+        if self.delegate?.type() == .onlyMonth {
             self.labelDay?.layer.cornerRadius = 10.0
             self.labelDay?.layer.masksToBounds = true
         }
 //        self.constraintEventsHeight.constant = cellHeight - labelDay.font.lineHeight
-        let isSelect = selectDate?.isSameDate(date: data?.date) ?? false
+        let isSelect = self.delegate?.selectedDate().isSameDate(date: data?.date) ?? false
         
         setSelectDay(isSelect: isSelect)
         
@@ -116,7 +116,7 @@ class CalendarDayView: UIView {
         if self.data?.isEnable == true {
             labelDay?.textColor = enableTextColor
             if isSelect {
-                if self.type == .onlyMonth {
+                if self.delegate?.type() == .onlyMonth {
                     self.labelDay?.backgroundColor = selectColor
                 } else {
                     self.backgroundColor = selectColor
@@ -124,7 +124,7 @@ class CalendarDayView: UIView {
             } else {
                 if isToday() {
                     self.labelDay?.textColor = todayTextColor
-                    if self.type == .onlyMonth {
+                    if self.delegate?.type() == .onlyMonth {
                         self.labelDay?.backgroundColor = todayBackgroundColor
                     } else {
                         self.backgroundColor = todayBackgroundColor
