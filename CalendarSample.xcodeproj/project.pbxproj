@@ -10,6 +10,8 @@
 		480D8BB329B07E5E005E6F23 /* test.json in Resources */ = {isa = PBXBuildFile; fileRef = 480D8BB229B07E5E005E6F23 /* test.json */; };
 		480D8BC529B08618005E6F23 /* ArtistNewsUpdateObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480D8BC429B08618005E6F23 /* ArtistNewsUpdateObject.swift */; };
 		480D8BC729B08860005E6F23 /* DataManagerBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 480D8BC629B08860005E6F23 /* DataManagerBase.swift */; };
+		481FFE0D29B573C7002D6A3A /* CalendarCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 481FFE0C29B573C7002D6A3A /* CalendarCollectionViewFlowLayout.swift */; };
+		481FFE0F29B576DA002D6A3A /* CalendarMonthContainerCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 481FFE0E29B576DA002D6A3A /* CalendarMonthContainerCell.xib */; };
 		483AF47E29A5D65500B56265 /* CalendarMonthContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 483AF47C29A5D65500B56265 /* CalendarMonthContainerCell.swift */; };
 		486DFF842999F78E0075CD6B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486DFF832999F78E0075CD6B /* AppDelegate.swift */; };
 		486DFF882999F78E0075CD6B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 486DFF872999F78E0075CD6B /* ViewController.swift */; };
@@ -41,6 +43,8 @@
 		480D8BB229B07E5E005E6F23 /* test.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = test.json; sourceTree = "<group>"; };
 		480D8BC429B08618005E6F23 /* ArtistNewsUpdateObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArtistNewsUpdateObject.swift; sourceTree = "<group>"; };
 		480D8BC629B08860005E6F23 /* DataManagerBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagerBase.swift; sourceTree = "<group>"; };
+		481FFE0C29B573C7002D6A3A /* CalendarCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		481FFE0E29B576DA002D6A3A /* CalendarMonthContainerCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CalendarMonthContainerCell.xib; sourceTree = "<group>"; };
 		483AF47C29A5D65500B56265 /* CalendarMonthContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarMonthContainerCell.swift; sourceTree = "<group>"; };
 		486DFF802999F78E0075CD6B /* CalendarSample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CalendarSample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		486DFF832999F78E0075CD6B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -135,8 +139,10 @@
 				4894D5BB299DF4AE0030B88E /* CalendarDayView.xib */,
 				6073CB8A299FBF3000BC1EF1 /* Common.swift */,
 				483AF47C29A5D65500B56265 /* CalendarMonthContainerCell.swift */,
+				481FFE0E29B576DA002D6A3A /* CalendarMonthContainerCell.xib */,
 				6046C20229AF36EA006FAE79 /* CalendarHeaderReusableView.swift */,
 				6046C20329AF36EA006FAE79 /* CalendarHeaderReusableView.xib */,
+				481FFE0C29B573C7002D6A3A /* CalendarCollectionViewFlowLayout.swift */,
 			);
 			path = CalendarSample;
 			sourceTree = "<group>";
@@ -231,6 +237,7 @@
 			files = (
 				6046C20529AF36EA006FAE79 /* CalendarHeaderReusableView.xib in Resources */,
 				486DFFB0299B24C60075CD6B /* CalendarEventCell.xib in Resources */,
+				481FFE0F29B576DA002D6A3A /* CalendarMonthContainerCell.xib in Resources */,
 				486DFF902999F78F0075CD6B /* LaunchScreen.storyboard in Resources */,
 				480D8BB329B07E5E005E6F23 /* test.json in Resources */,
 				486DFF8D2999F78F0075CD6B /* Assets.xcassets in Resources */,
@@ -298,6 +305,7 @@
 				4894D5BA299DF49E0030B88E /* CalendarDayView.swift in Sources */,
 				4894D5B1299DEEF00030B88E /* CalendarWeekContainerCell.swift in Sources */,
 				6046C20429AF36EA006FAE79 /* CalendarHeaderReusableView.swift in Sources */,
+				481FFE0D29B573C7002D6A3A /* CalendarCollectionViewFlowLayout.swift in Sources */,
 				480D8BC729B08860005E6F23 /* DataManagerBase.swift in Sources */,
 				4894D5BE299E16620030B88E /* CalendarMonthObject.swift in Sources */,
 				486DFF842999F78E0075CD6B /* AppDelegate.swift in Sources */,
