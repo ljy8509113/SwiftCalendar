@@ -25,7 +25,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
     var formatter = DateFormatter()
     var calendar = Calendar.current
     
-    var delegate: CalendarDelegate?
+    var delegate: CalendarProtocol?
     var callbackMove: ((CalendarMoveType) -> Void)?
 
     override func awakeFromNib() {
@@ -56,7 +56,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         
     }
     
-    func setup(delegate: CalendarDelegate,
+    func setup(delegate: CalendarProtocol,
                width: CGFloat = UIScreen.main.bounds.width,
                cellHeight: CGFloat,
                callbackMove: ((CalendarMoveType) -> Void)?) {
@@ -296,7 +296,7 @@ extension CalendarMonthContainerCell: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CalendarMonthContainerCell : CalendarDelegate {
+extension CalendarMonthContainerCell : CalendarProtocol {
     func changeHeight(height: CGFloat) {
         let cellHeight = height + topSize()
         self.delegate?.changeHeight(height: cellHeight)
@@ -318,5 +318,9 @@ extension CalendarMonthContainerCell : CalendarDelegate {
  
     func status() -> CalendarStatus {
         return self.delegate?.status() ?? .month
+    }
+    
+    func type() -> CalendarType? {
+        return self.delegate?.type()
     }
 }

@@ -9,8 +9,6 @@ import UIKit
 import Cartography
 
 class CalendarWeekCell: UICollectionViewCell {
-
-//    @IBOutlet weak var stackView: UIStackView!
     var stackView: UIStackView?
     var arrayDays: [CalendarDayObject] = []
     var callbackOnClick: ((Date?) -> Void)?
@@ -45,26 +43,34 @@ class CalendarWeekCell: UICollectionViewCell {
                 v.bottom == v.superview!.bottom
             }
         }
-            
-        for i in 1...7 {
-            let view = CalendarDayView(frame: .zero)
-            view.tag = i
-            self.stackView?.addArrangedSubview(view)
-        }
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
     }
     
-    func setup(selectDate: Date?, array: [CalendarDayObject], cellHeight: CGFloat, callbackOnClick: ((Date?) -> Void)? ) {
+    func setup(type: CalendarType?, selectDate: Date?, array: [CalendarDayObject], cellHeight: CGFloat, callbackOnClick: ((Date?) -> Void)? ) {
         self.arrayDays = array
-        let subCount = self.stackView?.subviews.count ?? 0
         
+        var subCount = self.stackView?.subviews.count ?? 0
+        
+        if subCount < 7 {
+            self.stackView?.subviews.forEach {
+                $0.removeFromSuperview()
+            }
+            
+            for i in 1...7 {
+                let view = CalendarDayView(type: type)
+                view.tag = i
+                self.stackView?.addArrangedSubview(view)
+            }
+        }
+        
+        subCount = self.stackView?.subviews.count ?? 0
         for i in 0..<array.count {
             if subCount > i, let view = self.stackView?.subviews[i] as? CalendarDayView {
 //                view.setup(data: array[i], cellHeight: cellHeight,  delegate: delegate)
-                view.setup(selectDate: selectDate, data: array[i], cellHeight: cellHeight, callbackOnClick: callbackOnClick)
+                view.setup(type: type, selectDate: selectDate, data: array[i], cellHeight: cellHeight, callbackOnClick: callbackOnClick)
             }
         }
     }

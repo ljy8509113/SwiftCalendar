@@ -9,8 +9,6 @@ import UIKit
 import Cartography
 
 class CalendarMonthCell: UICollectionViewCell {
-    
-//    @IBOutlet weak var collectionView: UICollectionView!
     var collectionView: UICollectionView?
     
     var data: CalendarMonthObject?
@@ -19,7 +17,7 @@ class CalendarMonthCell: UICollectionViewCell {
     var selectedRow: Int?
     var movePoint: CGFloat = 0.0
     
-    var delegate: CalendarDelegate?
+    var delegate: CalendarProtocol?
     
     var weekContainerCell: CalendarWeekContainerCell?
     var cellAlpha: CGFloat = 1.0
@@ -36,7 +34,6 @@ class CalendarMonthCell: UICollectionViewCell {
     
     func initialize() {
         if self.collectionView == nil {
-//            self.collectionView.registerNib(type: CalendarWeekCell.self)
             self.backgroundColor = .clear
             
             let flow = UICollectionViewFlowLayout()
@@ -75,7 +72,7 @@ class CalendarMonthCell: UICollectionViewCell {
     
     func setup(data: CalendarMonthObject,
                cellHeight: CGFloat,
-               delegate: CalendarDelegate) {
+               delegate: CalendarProtocol) {
         
         self.data = data
         self.cellHeight = cellHeight
@@ -91,9 +88,6 @@ class CalendarMonthCell: UICollectionViewCell {
     }
 
     func moveScroll(pointY: Double, isFinish: Bool) {
-        
-//        print("movePoint y : \(pointY) :: \(isFinish)")
-//        print(pointY)
         if self.selectedRow == nil {
             self.selectedRow = existSelectedRow()
         }
@@ -170,12 +164,10 @@ extension CalendarMonthCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(type: CalendarWeekCell.self, indexPath: indexPath)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CalendarWeekCell.self)", for: indexPath) as! CalendarWeekCell
         cell.tag = indexPath.row
         if let weekData = self.data?.arrayWeek[indexPath.row] {
-//            cell.setup(array: weekData.arrayDays, cellHeight: self.cellHeight, delegate: self)
-            cell.setup(selectDate: self.delegate?.selectedDate(), array: weekData.arrayDays, cellHeight: self.cellHeight, callbackOnClick: { [weak self] date in
+            cell.setup(type: self.delegate?.type(), selectDate: self.delegate?.selectedDate(), array: weekData.arrayDays, cellHeight: self.cellHeight, callbackOnClick: { [weak self] date in
                 self?.setSelectDay(date: date)
             })
             
@@ -194,9 +186,7 @@ extension CalendarMonthCell: UICollectionViewDelegate {
 
 extension CalendarMonthCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        let cell = collectionView.cellForItem(at: indexPath) as? CalendarWeekContainerCell
         let cell = collectionView.cellForItem(at: indexPath) as? CalendarWeekCell
-//        print("\(indexPath.row) :: alpha : \(self.cellAlpha)")
         if let row = self.selectedRow, indexPath.row != row {
             
             var height = self.cellHeight - self.movePoint
@@ -222,7 +212,7 @@ extension CalendarMonthCell: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CalendarMonthCell: CalendarDelegate {
+extension CalendarMonthCell: CalendarProtocol {
     func selectDate(date: Date) {
         self.setSelectDay(date: date)
     }
@@ -242,5 +232,9 @@ extension CalendarMonthCell: CalendarDelegate {
     
     func status() -> CalendarStatus {
         return self.delegate?.status() ?? .month
+    }
+    
+    func type() -> CalendarType? {
+        return self.delegate?.type()
     }
 }

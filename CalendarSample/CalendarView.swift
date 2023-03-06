@@ -84,8 +84,9 @@ class CalendarView: UIView {
                type: CalendarType,
                events: [ArtistNewsEventObject]?,
                width: CGFloat = UIScreen.main.bounds.width,
-               cellHeight: CGFloat = 60.0,
+               cellHeight: CGFloat = 80.0,
                callbackSelect: ((Date?) -> Void)?) {
+        
         self.callbackSelect = callbackSelect
         self.cellHeight = cellHeight
         self.calendarType = type
@@ -94,7 +95,7 @@ class CalendarView: UIView {
         
         switch type {
         case .monthAndWeek:
-            self.calendarCellHeight = monthHeight(date: self.date) + HEADER_HEIGHT
+            self.calendarCellHeight = monthHeight(date: self.date)
             
             if self.weekContainerCell == nil {
                 self.weekContainerCell = CalendarWeekContainerCell(frame: CGRect(x: 0.0, y: 0.0, width: width, height: self.cellHeight))
@@ -155,14 +156,14 @@ class CalendarView: UIView {
                             let y = 0.0
                             self.collectionView?.isUserInteractionEnabled = false
                             self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
-                            print("111 - isUserInteractionEnabled false")
+//                            print("111 - isUserInteractionEnabled false")
                         }
                     } else {
                         if current > self.cellHeight {
                             let y = monthHeight - weekHeight
                             self.collectionView?.isUserInteractionEnabled = false
                             self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
-                            print("222 - isUserInteractionEnabled false")
+//                            print("222 - isUserInteractionEnabled false")
                         }
                     }
                 }
@@ -177,14 +178,14 @@ class CalendarView: UIView {
                     frame.origin.x = 0.0
                     weekCell.frame = frame
                     self.collectionView?.isUserInteractionEnabled = true
-                    print("333 - isUserInteractionEnabled true")
+//                    print("333 - isUserInteractionEnabled true")
                 }
             } else {
                 if offset.y <= 0.0, !isFinish, self.weekContainerCell?.isHidden == false {
                     self.weekContainerCell?.isHidden = true
                     cell.collectionView?.reloadData()
                     self.collectionView?.isUserInteractionEnabled = true
-                    print("444 - isUserInteractionEnabled true")
+//                    print("444 - isUserInteractionEnabled true")
                 }
             }
             
@@ -195,7 +196,7 @@ class CalendarView: UIView {
         if let cell = self.monthContainerCell {
             return cell.getModeHeight(status: .month)
         }
-        return CGFloat(Calendar.current.getMonthOfWeekCount(date: date)) * self.cellHeight
+        return CGFloat(Calendar.current.getMonthOfWeekCount(date: date)) * self.cellHeight + HEADER_HEIGHT
     }
     
     func checkBottomMargin() {
@@ -344,7 +345,7 @@ extension CalendarView: UICollectionViewDelegateFlowLayout {
     }
 }
 
-extension CalendarView: CalendarDelegate {
+extension CalendarView: CalendarProtocol {
     func changeHeight(height: CGFloat) {
         if self.calendarCellHeight != height {
 //            print("changeHeight: current: \(self.calendarCellHeight) :: chage: \(height)")
@@ -356,9 +357,6 @@ extension CalendarView: CalendarDelegate {
     }
     
     func changeWeek(date: Date) {
-        if let header = self.collectionView?.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(row: 0, section: 0)) as? CalendarHeaderReusableView {
-            header.update(date: date)
-        }
     }
     
     func selectDate(date: Date) {
@@ -391,5 +389,9 @@ extension CalendarView: CalendarDelegate {
                 return .changing
             }
         }
+    }
+    
+    func type() -> CalendarType? {
+        return self.calendarType
     }
 }

@@ -9,9 +9,6 @@ import UIKit
 import Cartography
 
 class CalendarWeekContainerCell: UICollectionViewCell {
-//    @IBOutlet weak var collectionView: UICollectionView!
-//    @IBOutlet weak var constraintHeight: NSLayoutConstraint!
-    
     var collectionView: UICollectionView?
     var constraintHeight: NSLayoutConstraint?
     
@@ -21,7 +18,7 @@ class CalendarWeekContainerCell: UICollectionViewCell {
     var arrayWeek: [CalendarWeekObject] = []
     var data: CalendarWeekObject?
     
-    var delegate: CalendarDelegate?
+    var delegate: CalendarProtocol?
     var isInit: Bool = true
     
     override init(frame: CGRect) {
@@ -69,7 +66,7 @@ class CalendarWeekContainerCell: UICollectionViewCell {
     
     func setup(data: CalendarWeekObject?,
                cellHeight: CGFloat,
-               delegate: CalendarDelegate?) {
+               delegate: CalendarProtocol?) {
         
         self.delegate = delegate
         self.data = data
@@ -90,7 +87,6 @@ class CalendarWeekContainerCell: UICollectionViewCell {
     func setArray(date: Date) {
         self.arrayWeek.removeAll()
         self.data?.date = date
-        //        self.selectDate = date
         
         let previous = getWeekDate(date: date, addValue: -1)
         let next = getWeekDate(date: date, addValue: 1)
@@ -188,12 +184,10 @@ extension CalendarWeekContainerCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let cell = collectionView.dequeueReusableCell(type: CalendarWeekCell.self, indexPath: indexPath)
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CalendarWeekCell.self)", for: indexPath) as! CalendarWeekCell
         let data = self.arrayWeek[indexPath.row]
         cell.tag = indexPath.row
-//        cell.setup(array: data.arrayDays, cellHeight: self.cellHeight, delegate: delegate)
-        cell.setup(selectDate: self.delegate?.selectedDate(), array: data.arrayDays, cellHeight: self.cellHeight, callbackOnClick: { [weak self] date in
+        cell.setup(type: self.delegate?.type(), selectDate: self.delegate?.selectedDate(), array: data.arrayDays, cellHeight: self.cellHeight, callbackOnClick: { [weak self] date in
             if let date = date {
                 self?.setSelectDay(date: date)
             }
@@ -211,14 +205,12 @@ extension CalendarWeekContainerCell: UICollectionViewDataSource {
 
 extension CalendarWeekContainerCell: UICollectionViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        print("CalendarWeekContainerCell scrollViewDidEndDecelerating")
         if scrollView.contentOffset.x != scrollView.frame.size.width {
             scrollToCenter(scrollView: scrollView, isNoti: true)
         }
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        print("CalendarWeekContainerCell scrollViewDidEndScrollingAnimation")
         if scrollView.contentOffset.x != scrollView.frame.size.width {
             scrollToCenter(scrollView: scrollView, isNoti: true)
         }

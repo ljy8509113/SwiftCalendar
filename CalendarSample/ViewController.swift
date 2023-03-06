@@ -31,7 +31,7 @@ class ViewController: UIViewController {
         }
         
         self.calendarView.setup(selectDate: Date(),
-                                type: .monthAndWeek,
+                                type: .onlyMonth,
                                 events: events,
                                 callbackSelect: { [weak self] date in
             if self?.date.isSameMonth(date: date) == false {
