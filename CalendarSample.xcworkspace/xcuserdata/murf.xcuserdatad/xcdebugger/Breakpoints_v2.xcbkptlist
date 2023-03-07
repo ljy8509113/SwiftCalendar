@@ -51,8 +51,8 @@
             filePath = "CalendarSample/CalendarCollectionViewFlowLayout.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
             landmarkName = "getCalendarAttributes(at:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -67,8 +67,8 @@
             filePath = "CalendarSample/CalendarCollectionViewFlowLayout.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "121"
+            endingLineNumber = "121"
             landmarkName = "getCalendarAttributes(at:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -83,8 +83,8 @@
             filePath = "CalendarSample/CalendarCollectionViewFlowLayout.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
+            startingLineNumber = "111"
+            endingLineNumber = "111"
             landmarkName = "getCalendarAttributes(at:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -92,17 +92,49 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6AE454BD-AA52-4115-B6C3-DDFC48024309"
+            uuid = "EEEE45E1-0AC0-4A9A-A542-564A40E1C61D"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CalendarSample/CalendarCollectionViewFlowLayout.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "70"
-            endingLineNumber = "70"
-            landmarkName = "getFilterAttributes(at:)"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "getCalendarAttributes(at:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "EEEE45E1-0AC0-4A9A-A542-564A40E1C61D - a5a964b2053db550"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CalendarSample.CalendarCollectionViewFlowLayout.getCalendarAttributes(at: Swift.Optional&lt;Foundation.IndexPath&gt;) -&gt; Swift.Optional&lt;__C.UICollectionViewLayoutAttributes&gt;"
+                  moduleName = "CalendarSample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/murf/Desktop/Source/TEST/CalendarSample/SwiftCalendar/CalendarSample/CalendarCollectionViewFlowLayout.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "99"
+                  endingLineNumber = "99"
+                  offsetFromSymbolStart = "824">
+               </Location>
+               <Location
+                  uuid = "EEEE45E1-0AC0-4A9A-A542-564A40E1C61D - a5a964b2053db550"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "CalendarSample.CalendarCollectionViewFlowLayout.getCalendarAttributes(at: Swift.Optional&lt;Foundation.IndexPath&gt;) -&gt; Swift.Optional&lt;__C.UICollectionViewLayoutAttributes&gt;"
+                  moduleName = "CalendarSample"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/murf/Desktop/Source/TEST/CalendarSample/SwiftCalendar/CalendarSample/CalendarCollectionViewFlowLayout.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "99"
+                  endingLineNumber = "99"
+                  offsetFromSymbolStart = "1040">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

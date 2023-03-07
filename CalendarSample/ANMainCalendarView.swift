@@ -56,7 +56,7 @@ class ANMainCalendarView: UIView {
         flow.minimumLineSpacing = 10.0
         flow.minimumInteritemSpacing = 0.0
         flow.scrollDirection = .vertical
-        flow.sectionHeadersPinToVisibleBounds = true
+//        flow.sectionHeadersPinToVisibleBounds = true
         
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: flow)
         self.addSubview(self.collectionView!)
@@ -132,85 +132,85 @@ class ANMainCalendarView: UIView {
     }
     
     func moveScroll(scrollView: UIScrollView, isFinish: Bool) {
-//        if let cell = self.monthContainerCell, let weekCell = self.weekContainerCell {
-//            
-//            let offset = scrollView.contentOffset
-//            let monthHeight = cell.monthCollectionViewHeight(index: 1)
-//            let max = monthHeight - self.cellHeight
-//            let current = cell.currentCollectionViewHeight()
-////            print("y: \(offset.y) :: \(max) current : \(current) :: \(monthHeight)")
-//            if offset.y <= max || (current != monthHeight && current != self.cellHeight) {
-//                if offset.y <= 0.0, current == monthHeight {
-//                    return
-//                }
-//
-//                if offset.y > 0.0, current == monthHeight {
-//                    // month -> week 스크롤 시작
-//                    weekCell.isHidden = false
-//                    cell.changeWeekView(cell: weekCell)
-//                }
-//
-//                if self.subviews.count > 1, offset.y < max {
-//                    // week -> month 스트롤 시작
-//                    cell.reloadCurrent(cell: weekCell)
-//                }
-//
-//                let height = monthHeight - offset.y
-//                var moveY = offset.y
-//
-//                if height < self.cellHeight {
-//                    moveY = monthHeight - self.cellHeight
-//                } else if height > monthHeight {
-//                    moveY = 0.0
-//                }
-//
-//                cell.moveScroll(pointY: moveY, isFinish: isFinish)
-//            }
-//
-//            if isFinish {
-//                // 유저가 스크롤에서 손을 때거나 Decelerating 되었을때
-//                if offset.y > 0, offset.y <= max {
-//                    let monthHeight = cell.monthCollectionViewHeight(index: 1)
-//                    let weekHeight = cell.cellHeight
-//                    if self.isGestureDown == true {
-//                        if current < monthHeight {
-//                            let y = 0.0
-//                            self.collectionView?.isUserInteractionEnabled = false
-//                            self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
-////                            print("111 - isUserInteractionEnabled false")
-//                        }
-//                    } else {
-//                        if current > self.cellHeight {
-//                            let y = monthHeight - weekHeight
-//                            self.collectionView?.isUserInteractionEnabled = false
-//                            self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
-////                            print("222 - isUserInteractionEnabled false")
-//                        }
-//                    }
-//                }
-//            }
-//
-//            if offset.y >= max {
-//                if self.subviews.count == 1 {
-//                    // week
-//                    self.addSubview(weekCell)
-//                    var frame = weekCell.frame
-//                    frame.origin.y = HEADER_HEIGHT
-//                    frame.origin.x = 0.0
-//                    weekCell.frame = frame
-//                    self.collectionView?.isUserInteractionEnabled = true
-////                    print("333 - isUserInteractionEnabled true")
-//                }
-//            } else {
-//                if offset.y <= 0.0, !isFinish, self.weekContainerCell?.isHidden == false {
-//                    self.weekContainerCell?.isHidden = true
-//                    cell.collectionView?.reloadData()
-//                    self.collectionView?.isUserInteractionEnabled = true
-////                    print("444 - isUserInteractionEnabled true")
-//                }
-//            }
-//            
-//        }
+        if let cell = self.monthContainerCell, let weekCell = self.weekContainerCell {
+            
+            let offset = scrollView.contentOffset
+            let monthHeight = cell.monthCollectionViewHeight(index: 1)
+            let max = monthHeight - self.cellHeight
+            let current = cell.currentCollectionViewHeight()
+//            print("y: \(offset.y) :: \(max) current : \(current) :: \(monthHeight)")
+            if offset.y <= max || (current != monthHeight && current != self.cellHeight) {
+                if offset.y <= 0.0, current == monthHeight {
+                    return
+                }
+
+                if offset.y > 0.0, current == monthHeight {
+                    // month -> week 스크롤 시작
+                    weekCell.isHidden = false
+                    cell.changeWeekView(cell: weekCell)
+                }
+
+                if self.subviews.count > 1, offset.y < max {
+                    // week -> month 스트롤 시작
+                    cell.reloadCurrent(cell: weekCell)
+                }
+
+                let height = monthHeight - offset.y
+                var moveY = offset.y
+
+                if height < self.cellHeight {
+                    moveY = monthHeight - self.cellHeight
+                } else if height > monthHeight {
+                    moveY = 0.0
+                }
+
+                cell.moveScroll(pointY: moveY, isFinish: isFinish)
+            }
+
+            if isFinish {
+                // 유저가 스크롤에서 손을 때거나 Decelerating 되었을때
+                if offset.y > 0, offset.y <= max {
+                    let monthHeight = cell.monthCollectionViewHeight(index: 1)
+                    let weekHeight = cell.cellHeight
+                    if self.isGestureDown == true {
+                        if current < monthHeight {
+                            let y = 0.0
+                            self.collectionView?.isUserInteractionEnabled = false
+                            self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
+//                            print("111 - isUserInteractionEnabled false")
+                        }
+                    } else {
+                        if current > self.cellHeight {
+                            let y = monthHeight - weekHeight
+                            self.collectionView?.isUserInteractionEnabled = false
+                            self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
+//                            print("222 - isUserInteractionEnabled false")
+                        }
+                    }
+                }
+            }
+
+            if offset.y >= max {
+                if self.subviews.count == 1 {
+                    // week
+                    self.addSubview(weekCell)
+                    var frame = weekCell.frame
+                    frame.origin.y = HEADER_HEIGHT
+                    frame.origin.x = 0.0
+                    weekCell.frame = frame
+                    self.collectionView?.isUserInteractionEnabled = true
+//                    print("333 - isUserInteractionEnabled true")
+                }
+            } else {
+                if offset.y <= 0.0, !isFinish, self.weekContainerCell?.isHidden == false {
+                    self.weekContainerCell?.isHidden = true
+                    cell.collectionView?.reloadData()
+                    self.collectionView?.isUserInteractionEnabled = true
+//                    print("444 - isUserInteractionEnabled true")
+                }
+            }
+            
+        }
     }
     
     func monthHeight(date: Date) -> CGFloat {

@@ -66,13 +66,14 @@ class CalendarCollectionViewFlowLayout: UICollectionViewFlowLayout {
         
         let headerHeight = collectionView.visibleSupplementaryViews(ofKind: UICollectionView.elementKindSectionHeader).first?.frame.size.height ?? 0.0
         
-        if collectionView.contentOffset.y > stickyAttributes.frame.minY - headerHeight {
+        if collectionView.contentOffset.y + headerHeight > stickyAttributes.frame.minY {
+            print("\(collectionView.contentOffset.y) :: \(stickyAttributes.frame.minY - headerHeight)")
             var frame = stickyAttributes.frame
-            frame.origin.y = collectionView.contentOffset.y + headerHeight
+            frame.origin.y = collectionView.contentOffset.y
 //            frame.size.height = height
             stickyAttributes.frame = frame
             
-            stickyAttributes.zIndex = 2
+            stickyAttributes.zIndex = 1
             return stickyAttributes
         }
         return nil
@@ -103,6 +104,8 @@ class CalendarCollectionViewFlowLayout: UICollectionViewFlowLayout {
             topArea = filterArea + offsetY
             
             print("\(headerHeight). :: \(filterArea) topArea : \(topArea) :: \(stickyAttributes.frame.minY)")
+        } else {
+            topArea = offsetY
         }
         
         if topArea > stickyAttributes.frame.minY {
