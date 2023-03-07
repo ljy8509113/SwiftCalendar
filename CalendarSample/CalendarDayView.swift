@@ -16,18 +16,13 @@ class CalendarDayView: UIView {
     var constraintEventsHeight: NSLayoutConstraint?
     
     var data: CalendarDayObject?
-    var callbackOnClick:((Date?) -> Void)?
+    var callbackOnClick: ((Date?) -> Void)?
     var delegate: CalendarProtocol?
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         initialize()
     }
-
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        initialize()
-//    }
     
     init(delegate: CalendarProtocol?) {
         super.init(frame: .zero)
@@ -39,11 +34,13 @@ class CalendarDayView: UIView {
         if self.delegate?.type() != .onlyMonth {
             self.stackViewEvents = UIStackView(frame: .zero)
             self.addSubview(self.stackViewEvents!)
+            
             Cartography.constrain(self.stackViewEvents!) { (stack) in
                 stack.trailing == stack.superview!.trailing
                 stack.leading == stack.superview!.leading
                 stack.bottom == stack.superview!.bottom
             }
+            
             self.stackViewEvents?.distribution = .fillEqually
             self.stackViewEvents?.alignment = .center
             self.stackViewEvents?.axis = .vertical
@@ -53,6 +50,7 @@ class CalendarDayView: UIView {
         self.labelDay?.font = UIFont.systemFont(ofSize: 12.0)
         self.labelDay?.textColor = .black
         self.labelDay?.textAlignment = .center
+        self.labelDay?.backgroundColor = .clear
         self.addSubview(self.labelDay!)
         
         Cartography.constrain(self.labelDay!) { (label) in
@@ -71,13 +69,17 @@ class CalendarDayView: UIView {
         self.addSubview(self.button!)
         
         Cartography.constrain(self.button!) { (btn) in
-            btn.size == btn.superview!.size
+            btn.top == btn.superview!.top
+            btn.leading == btn.superview!.leading
+            btn.trailing == btn.superview!.trailing
+            btn.bottom == btn.superview!.bottom
         }
+        
         self.button?.setTitle("", for: .normal)
         self.button?.addTarget(self, action: #selector(onSelect), for: .touchUpInside)
     }
     
-    func setup(delegate: CalendarProtocol?, data: CalendarDayObject?, cellHeight: CGFloat, callbackOnClick:((Date?) -> Void)? ) {
+    func setup(delegate: CalendarProtocol?, data: CalendarDayObject?, cellHeight: CGFloat, callbackOnClick: ((Date?) -> Void)? ) {
         self.callbackOnClick = callbackOnClick
 //        self.button.setTitle("", for: .normal)
         self.data = data
@@ -120,6 +122,7 @@ class CalendarDayView: UIView {
                     self.labelDay?.backgroundColor = selectColor
                 } else {
                     self.backgroundColor = selectColor
+                    self.labelDay?.backgroundColor = selectColor
                 }
             } else {
                 if isToday() {
@@ -128,6 +131,7 @@ class CalendarDayView: UIView {
                         self.labelDay?.backgroundColor = todayBackgroundColor
                     } else {
                         self.backgroundColor = todayBackgroundColor
+                        self.labelDay?.backgroundColor = todayBackgroundColor
                     }
                 } else {
                     self.backgroundColor = backgroundColor

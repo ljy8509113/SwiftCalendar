@@ -76,7 +76,7 @@ class CalendarWeekContainerCell: UICollectionViewCell {
         if let date = data?.date {
             setArray(date: date)
             self.collectionView?.reloadData()
-            self.collectionView?.performBatchUpdates({}, completion: { [weak self] result in
+            self.collectionView?.performBatchUpdates({}, completion: { [weak self] _ in
                 if self?.isInit == false {
                     self?.scrollToIndex(index: 1)
                 }
@@ -109,7 +109,7 @@ class CalendarWeekContainerCell: UICollectionViewCell {
         }
     }
     
-    func setNextWeek()  {
+    func setNextWeek() {
         if let next = self.arrayWeek[2].date {
             setArray(date: next)
         }
@@ -138,7 +138,7 @@ class CalendarWeekContainerCell: UICollectionViewCell {
         self.collectionView?.reloadData()
         scrollToIndex(index: 1)
         
-        self.collectionView?.performBatchUpdates({}, completion: { [weak self] result in
+        self.collectionView?.performBatchUpdates({}, completion: { [weak self] _ in
             if isNoti {
                 if let selectDate = self?.arrayWeek[1].date {
                     self?.delegate?.changeWeek(date: selectDate)

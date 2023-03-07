@@ -1,24 +1,14 @@
 //
-//  CalendarView.swift
+//  ANMainCalendarView.swift
 //  CalendarSample
 //
-//  Created by Murf on 2023/02/15.
+//  Created by Murf on 2023/03/07.
 //
 
 import UIKit
 import Cartography
 
-protocol CalendarProtocol {
-    func changeHeight(height: CGFloat)
-    func changeWeek(date: Date)
-    func startedDate() -> Date?
-    func selectDate(date: Date)
-    func selectedDate() -> Date
-    func status() -> CalendarStatus
-    func type() -> CalendarType?
-}
-
-class CalendarView: UIView {
+class ANMainCalendarView: UIView {
     var collectionView: UICollectionView?
     
     var arrayEvent: [ArtistNewsEventObject]?
@@ -60,12 +50,13 @@ class CalendarView: UIView {
         }
         
 //        let flow = UICollectionViewFlowLayout()
-//        let flow = CalendarCollectionViewFlowLayout(stickyIndexPath: IndexPath(row: 0, section: 0))
-        let flow = CalendarCollectionViewFlowLayout(filterIndex: nil, calendarIndex: IndexPath(row: 0, section: 0))
+        let filter = IndexPath(row: 0, section: 0)
+        let calendar = IndexPath(row: 1, section: 0)
+        let flow = CalendarCollectionViewFlowLayout(filterIndex: filter, calendarIndex: calendar)
         flow.minimumLineSpacing = 10.0
         flow.minimumInteritemSpacing = 0.0
         flow.scrollDirection = .vertical
-//        flow.sectionHeadersPinToVisibleBounds = true
+        flow.sectionHeadersPinToVisibleBounds = true
         
         self.collectionView = UICollectionView(frame: .zero, collectionViewLayout: flow)
         self.addSubview(self.collectionView!)
@@ -80,6 +71,8 @@ class CalendarView: UIView {
         self.collectionView?.registerNib(type: CalendarWeekContainerCell.self)
         self.collectionView?.registerNib(type: CalendarMonthContainerCell.self)
         self.collectionView?.registerNib(type: ANEventCell.self)
+        self.collectionView?.register(ANFilterHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "\(ANFilterHeaderCell.self)")
+        self.collectionView?.registerNib(type: ANFilterCell.self)
         
         self.collectionView?.delegate = self
         self.collectionView?.dataSource = self
@@ -109,7 +102,6 @@ class CalendarView: UIView {
     
     func setup(startDate: Date?,
                selectDate: Date?,
-               type: CalendarType,
                events: [ArtistNewsEventObject]?,
                width: CGFloat = UIScreen.main.bounds.width,
                cellHeight: CGFloat = 80.0,
@@ -117,12 +109,12 @@ class CalendarView: UIView {
         
         self.callbackSelect = callbackSelect
         self.cellHeight = cellHeight
-        self.calendarType = type
+        self.calendarType = .monthAndWeek
         self.date = selectDate ?? Date()
         self.startDate = startDate
 //        self.arrayEvent = events
         
-        switch type {
+        switch self.calendarType {
         case .monthAndWeek:
             self.calendarCellHeight = monthHeight(date: self.date)
             
@@ -140,85 +132,85 @@ class CalendarView: UIView {
     }
     
     func moveScroll(scrollView: UIScrollView, isFinish: Bool) {
-        if let cell = self.monthContainerCell, let weekCell = self.weekContainerCell {
-            
-            let offset = scrollView.contentOffset
-            let monthHeight = cell.monthCollectionViewHeight(index: 1)
-            let max = monthHeight - self.cellHeight
-            let current = cell.currentCollectionViewHeight()
-//            print("y: \(offset.y) :: \(max) current : \(current) :: \(monthHeight)")
-            if offset.y <= max || (current != monthHeight && current != self.cellHeight) {
-                if offset.y <= 0.0, current == monthHeight {
-                    return
-                }
-
-                if offset.y > 0.0, current == monthHeight {
-                    // month -> week 스크롤 시작
-                    weekCell.isHidden = false
-                    cell.changeWeekView(cell: weekCell)
-                }
-
-                if self.subviews.count > 1, offset.y < max {
-                    // week -> month 스트롤 시작
-                    cell.reloadCurrent(cell: weekCell)
-                }
-
-                let height = monthHeight - offset.y
-                var moveY = offset.y
-
-                if height < self.cellHeight {
-                    moveY = monthHeight - self.cellHeight
-                } else if height > monthHeight {
-                    moveY = 0.0
-                }
-
-                cell.moveScroll(pointY: moveY, isFinish: isFinish)
-            }
-
-            if isFinish {
-                // 유저가 스크롤에서 손을 때거나 Decelerating 되었을때
-                if offset.y > 0, offset.y <= max {
-                    let monthHeight = cell.monthCollectionViewHeight(index: 1)
-                    let weekHeight = cell.cellHeight
-                    if self.isGestureDown == true {
-                        if current < monthHeight {
-                            let y = 0.0
-                            self.collectionView?.isUserInteractionEnabled = false
-                            self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
-//                            print("111 - isUserInteractionEnabled false")
-                        }
-                    } else {
-                        if current > self.cellHeight {
-                            let y = monthHeight - weekHeight
-                            self.collectionView?.isUserInteractionEnabled = false
-                            self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
-//                            print("222 - isUserInteractionEnabled false")
-                        }
-                    }
-                }
-            }
-
-            if offset.y >= max {
-                if self.subviews.count == 1 {
-                    // week
-                    self.addSubview(weekCell)
-                    var frame = weekCell.frame
-                    frame.origin.y = HEADER_HEIGHT
-                    frame.origin.x = 0.0
-                    weekCell.frame = frame
-                    self.collectionView?.isUserInteractionEnabled = true
-//                    print("333 - isUserInteractionEnabled true")
-                }
-            } else {
-                if offset.y <= 0.0, !isFinish, self.weekContainerCell?.isHidden == false {
-                    self.weekContainerCell?.isHidden = true
-                    cell.collectionView?.reloadData()
-                    self.collectionView?.isUserInteractionEnabled = true
-//                    print("444 - isUserInteractionEnabled true")
-                }
-            }
-            
-        }
+//        if let cell = self.monthContainerCell, let weekCell = self.weekContainerCell {
+//            
+//            let offset = scrollView.contentOffset
+//            let monthHeight = cell.monthCollectionViewHeight(index: 1)
+//            let max = monthHeight - self.cellHeight
+//            let current = cell.currentCollectionViewHeight()
+////            print("y: \(offset.y) :: \(max) current : \(current) :: \(monthHeight)")
+//            if offset.y <= max || (current != monthHeight && current != self.cellHeight) {
+//                if offset.y <= 0.0, current == monthHeight {
+//                    return
+//                }
+//
+//                if offset.y > 0.0, current == monthHeight {
+//                    // month -> week 스크롤 시작
+//                    weekCell.isHidden = false
+//                    cell.changeWeekView(cell: weekCell)
+//                }
+//
+//                if self.subviews.count > 1, offset.y < max {
+//                    // week -> month 스트롤 시작
+//                    cell.reloadCurrent(cell: weekCell)
+//                }
+//
+//                let height = monthHeight - offset.y
+//                var moveY = offset.y
+//
+//                if height < self.cellHeight {
+//                    moveY = monthHeight - self.cellHeight
+//                } else if height > monthHeight {
+//                    moveY = 0.0
+//                }
+//
+//                cell.moveScroll(pointY: moveY, isFinish: isFinish)
+//            }
+//
+//            if isFinish {
+//                // 유저가 스크롤에서 손을 때거나 Decelerating 되었을때
+//                if offset.y > 0, offset.y <= max {
+//                    let monthHeight = cell.monthCollectionViewHeight(index: 1)
+//                    let weekHeight = cell.cellHeight
+//                    if self.isGestureDown == true {
+//                        if current < monthHeight {
+//                            let y = 0.0
+//                            self.collectionView?.isUserInteractionEnabled = false
+//                            self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
+////                            print("111 - isUserInteractionEnabled false")
+//                        }
+//                    } else {
+//                        if current > self.cellHeight {
+//                            let y = monthHeight - weekHeight
+//                            self.collectionView?.isUserInteractionEnabled = false
+//                            self.collectionView?.setContentOffset(CGPoint(x: 0.0, y: y), animated: true)
+////                            print("222 - isUserInteractionEnabled false")
+//                        }
+//                    }
+//                }
+//            }
+//
+//            if offset.y >= max {
+//                if self.subviews.count == 1 {
+//                    // week
+//                    self.addSubview(weekCell)
+//                    var frame = weekCell.frame
+//                    frame.origin.y = HEADER_HEIGHT
+//                    frame.origin.x = 0.0
+//                    weekCell.frame = frame
+//                    self.collectionView?.isUserInteractionEnabled = true
+////                    print("333 - isUserInteractionEnabled true")
+//                }
+//            } else {
+//                if offset.y <= 0.0, !isFinish, self.weekContainerCell?.isHidden == false {
+//                    self.weekContainerCell?.isHidden = true
+//                    cell.collectionView?.reloadData()
+//                    self.collectionView?.isUserInteractionEnabled = true
+////                    print("444 - isUserInteractionEnabled true")
+//                }
+//            }
+//            
+//        }
     }
     
     func monthHeight(date: Date) -> CGFloat {
@@ -238,7 +230,7 @@ class CalendarView: UIView {
             let weekHeight = otherHeight + self.cellHeight
             let monthHeight = otherHeight + monthHeight(date: self.date)
             let height = self.frame.size.height
-            print("checkBottomMargin :: \(weekHeight) :: \(height)")
+//            print("checkBottomMargin :: \(weekHeight) :: \(height)")
 
             var bottom: CGFloat = .zero
             if monthHeight > height && weekHeight < height {
@@ -253,13 +245,13 @@ class CalendarView: UIView {
     }
 }
 
-extension CalendarView: UIGestureRecognizerDelegate {
+extension ANMainCalendarView: UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
 }
 
-extension CalendarView: UICollectionViewDelegate {
+extension ANMainCalendarView: UICollectionViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
 //        print("scrollViewDidScroll :: \(scrollView.contentOffset)")
@@ -279,7 +271,23 @@ extension CalendarView: UICollectionViewDelegate {
     }
 }
 
-extension CalendarView: UICollectionViewDataSource {
+extension ANMainCalendarView: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        if kind == UICollectionView.elementKindSectionHeader {
+            let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "\(ANFilterHeaderCell.self)", for: indexPath) as! ANFilterHeaderCell
+            view.backgroundColor = .blue
+            
+            return view
+        }
+        
+        return UICollectionReusableView()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let width = UIScreen.main.bounds.width
+        return CGSize(width: width, height: 30.0)
+    }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -288,13 +296,16 @@ extension CalendarView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if self.calendarType == .monthAndWeek {
             let count = self.arrayEvent?.count ?? 1
-            return (count == 0 ? 1 : count) + 1
+            return (count == 0 ? 1 : count) + 2
         }
-        return 1
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row == 0 {
+            let cell = collectionView.dequeueReusableCell(type: ANFilterCell.self, indexPath: indexPath)
+            return cell
+        } else if indexPath.row == 1 {
             if self.calendarType == .onlyWeek {
                 let cell = collectionView.dequeueReusableCell(type: CalendarWeekContainerCell.self, indexPath: indexPath)
                 cell.setup(data: self.weekData, cellHeight: self.cellHeight, delegate: self)
@@ -353,26 +364,30 @@ extension CalendarView: UICollectionViewDataSource {
         } else {
             let cell = collectionView.dequeueReusableCell(type: ANEventCell.self, indexPath: indexPath)
 //            cell.setup(row: indexPath.row)
-            let data = self.arrayEvent?[indexPath.row - 1]
+            let data = self.arrayEvent?[indexPath.row - 2]
             cell.setup(data: data)
             return cell
         }
     }
 }
 
-extension CalendarView: UICollectionViewDelegateFlowLayout {
+extension ANMainCalendarView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = UIScreen.main.bounds.width
         if indexPath.row == 0 {
-//            print("viewcontroller : h : \(self.calendarCellHeight) :: ")
-            return CGSize(width: width, height: self.calendarCellHeight)
+            return CGSize(width: width, height: 100.0)
         } else {
-            return CGSize(width: width, height: EVENT_HEIGHT)
+            if indexPath.row == 1 {
+    //            print("viewcontroller : h : \(self.calendarCellHeight) :: ")
+                return CGSize(width: width, height: self.calendarCellHeight)
+            } else {
+                return CGSize(width: width, height: EVENT_HEIGHT)
+            }
         }
     }
 }
 
-extension CalendarView: CalendarProtocol {
+extension ANMainCalendarView: CalendarProtocol {
     func changeHeight(height: CGFloat) {
         if self.calendarCellHeight != height {
 //            print("changeHeight: current: \(self.calendarCellHeight) :: chage: \(height)")

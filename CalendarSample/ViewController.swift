@@ -11,6 +11,8 @@ import ObjectMapper
 class ViewController: UIViewController {
     
     @IBOutlet weak var calendarView: CalendarView!
+    @IBOutlet weak var anMainView: ANMainCalendarView!
+    
     var date: Date = Date()
     
     override func viewDidLoad() {
@@ -30,14 +32,25 @@ class ViewController: UIViewController {
             }
         }
         
-        self.calendarView.setup(startDate: nil,
-                                selectDate: Date(),
-                                type: .onlyMonth,
-                                events: events,
-                                callbackSelect: { [weak self] date in
-            if self?.date.isSameMonth(date: date) == false {
-                
-            }
+//        self.calendarView.setup(startDate: nil,
+//                                selectDate: Date(),
+//                                type: .monthAndWeek,
+//                                events: events,
+//                                cellHeight: 80.0,
+//                                callbackSelect: { [weak self] date in
+//            if self?.date.isSameMonth(date: date) == false {
+//
+//            }
+//        })
+        
+        self.anMainView.setup(startDate: nil,
+                              selectDate: Date(),
+                              events: events,
+                              cellHeight: 80.0,
+                              callbackSelect: { [weak self] date in
+            
+            
+            
         })
         
     }

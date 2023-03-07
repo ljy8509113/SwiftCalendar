@@ -28,20 +28,29 @@
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z7s-AV-EV0" customClass="ANMainCalendarView" customModule="CalendarSample" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="z7s-AV-EV0" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="7dy-ci-kek"/>
+                            <constraint firstItem="z7s-AV-EV0" firstAttribute="top" secondItem="SnA-JQ-jiO" secondAttribute="bottom" id="B9o-MV-31O"/>
                             <constraint firstItem="j7v-WU-7fw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="DiG-zg-hja"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="SnA-JQ-jiO" secondAttribute="trailing" id="EX4-36-87P"/>
                             <constraint firstItem="j7v-WU-7fw" firstAttribute="top" secondItem="SnA-JQ-jiO" secondAttribute="bottom" id="Ehu-tB-Rc8"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="j7v-WU-7fw" secondAttribute="bottom" id="I4M-m5-zY7"/>
                             <constraint firstItem="SnA-JQ-jiO" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="RZs-k8-uAa"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="z7s-AV-EV0" secondAttribute="trailing" id="YnA-DU-fOi"/>
                             <constraint firstItem="j7v-WU-7fw" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="cCg-ae-vD9"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="z7s-AV-EV0" secondAttribute="bottom" id="o9h-ga-nXS"/>
                             <constraint firstItem="SnA-JQ-jiO" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="zds-ts-GuP"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="anMainView" destination="z7s-AV-EV0" id="3p3-fX-WgN"/>
                         <outlet property="calendarView" destination="j7v-WU-7fw" id="XbZ-2a-YPh"/>
                     </connections>
                 </viewController>
