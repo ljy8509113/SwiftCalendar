@@ -56,7 +56,6 @@ class CalendarWeekContainerCell: UICollectionViewCell {
             self.collectionView?.dataSource = self
             self.collectionView?.isPagingEnabled = true
             
-            self.backgroundColor = .cyan
         }
     }
     
@@ -71,7 +70,7 @@ class CalendarWeekContainerCell: UICollectionViewCell {
         self.delegate = delegate
         self.data = data
         self.cellHeight = cellHeight
-        self.constraintHeight?.constant = cellHeight
+        self.constraintHeight?.constant = ceil(cellHeight)
         
         if let date = data?.date {
             setArray(date: date)
@@ -173,6 +172,12 @@ class CalendarWeekContainerCell: UICollectionViewCell {
                 self?.setSelectDay(date: date)
             })
         }
+    }
+    
+    func changeHeight(height: CGFloat, alpha: CGFloat) {
+        self.alpha = alpha
+        self.cellHeight = height
+        self.constraintHeight?.constant = ceil(height)
     }
 }
 

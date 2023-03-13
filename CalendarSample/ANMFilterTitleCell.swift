@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ANFilterHeaderCell: UICollectionReusableView {
+class ANMFilterTitleCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()

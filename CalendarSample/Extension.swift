@@ -109,4 +109,10 @@ extension Calendar {
         
         return self.date(byAdding: DateComponents(day: -(index)), to: date)
     }
+    
+    func dayStr(date: Date) -> String {
+        let index = self.component(.weekday, from: date) - 1
+        let array = ["일","월","화","수","목","금","토"]
+        return array[index]
+    }
 }

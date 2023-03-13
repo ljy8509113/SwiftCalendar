@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum CalendarStatus {
     case month
@@ -23,15 +24,47 @@ enum CalendarType {
     case onlyMonth
     case onlyWeek
     case monthAndWeek
+    
+    func filterHeaderIndex() -> IndexPath? {
+        switch self {
+        case .monthAndWeek :
+            return IndexPath(row: 0, section: 0)
+        default:
+            return nil
+        }
+    }
+    
+    func filterIndex() -> IndexPath? {
+        switch self {
+        case .monthAndWeek :
+            return IndexPath(row: 1, section: 0)
+        default:
+            return nil
+        }
+    }
+    
+    func calendarIndex() -> IndexPath {
+        switch self {
+        case .monthAndWeek :
+            return IndexPath(row: 2, section: 0)
+        default:
+            return IndexPath(row: 0, section: 0)
+        }
+    }
+    
+    func topArea(collectionView: UICollectionView) -> CGFloat {
+        switch self {
+        case .monthAndWeek:
+            let header = collectionView.cellForItem(at: filterHeaderIndex()!)?.frame.size.height ?? 40.0
+            let filter = collectionView.cellForItem(at: filterIndex()!)?.frame.size.height ?? 100.0
+            
+            return header + filter
+        default:
+            return 0.0
+        }
+    }
 }
 
-class Common: NSObject {
-    static let CELL_HEIGHT = 60.0
-}
-
-
-
-///////////
 public enum ArtistNewsUpdateType: String {
     case all, sns, anniversary, release, contents, other = "etc"
     case broadcast, show, event, purchase, vote

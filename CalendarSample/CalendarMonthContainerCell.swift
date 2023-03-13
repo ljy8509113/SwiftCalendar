@@ -12,7 +12,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
     
     @IBOutlet weak var viewTop: UIView!
 //    @IBOutlet weak var constraintTop: NSLayoutConstraint!
-    @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var stackView: CalendarDayHeaderView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var constraintCollectionHeight: NSLayoutConstraint!
     
@@ -33,15 +33,17 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         // Initialization code
         
         self.formatter.dateFormat = "yyyyMM"
-        let arrayWeekStr = ["일", "월", "화", "수", "목", "금", "토"]
-        for day in arrayWeekStr {
-            let label = UILabel(frame: .zero)
-            label.text = day
-            label.textAlignment = .center
-            label.textColor = .black
-            self.stackView.addArrangedSubview(label)
-        }
+//        let arrayWeekStr = ["일", "월", "화", "수", "목", "금", "토"]
+//        for day in arrayWeekStr {
+//            let label = UILabel(frame: .zero)
+//            label.text = day
+//            label.textAlignment = .center
+//            label.textColor = .black
+//            self.stackView.addArrangedSubview(label)
+//        }
         
+        
+        self.stackView.setup(weeks: nil)
         self.collectionView.register(CalendarMonthCell.self, forCellWithReuseIdentifier: "\(CalendarMonthCell.self)")
         
         self.collectionView.delegate = self
@@ -160,7 +162,8 @@ class CalendarMonthContainerCell: UICollectionViewCell {
 //        self.constraintTop?.constant = pointY
         
         let monthHeight = monthCollectionViewHeight(index: 1)
-        if pointY == monthHeight - self.cellHeight {
+//        if pointY == monthHeight - self.cellHeight {
+        if pointY == monthHeight - weekCellHeight() {
             self.collectionView?.isScrollEnabled = false
         } else if pointY == 0.0 {
             self.collectionView?.isScrollEnabled = true
@@ -174,7 +177,7 @@ class CalendarMonthContainerCell: UICollectionViewCell {
         if status == .month {
             return monthCollectionViewHeight(index: 1) + topSize()
         } else {
-            return self.cellHeight + topSize()
+            return weekCellHeight() + topSize() //self.cellHeight + topSize()
         }
     }
     
@@ -326,5 +329,9 @@ extension CalendarMonthContainerCell: CalendarProtocol {
     
     func type() -> CalendarType? {
         return self.delegate?.type()
+    }
+    
+    func weekCellHeight() -> CGFloat {
+        return self.delegate?.weekCellHeight() ?? 0.0
     }
 }

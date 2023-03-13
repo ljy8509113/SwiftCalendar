@@ -39,6 +39,7 @@ class CalendarDayView: UIView {
                 stack.trailing == stack.superview!.trailing
                 stack.leading == stack.superview!.leading
                 stack.bottom == stack.superview!.bottom
+                stack.height == 0.0
             }
             
             self.stackViewEvents?.distribution = .fillEqually

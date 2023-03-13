@@ -9,6 +9,7 @@ import UIKit
 import Cartography
 
 class CalendarWeekCell: UICollectionViewCell {
+    var dayHeaderView: CalendarDayHeaderView?
     var stackView: UIStackView?
     var arrayDays: [CalendarDayObject] = []
     var callbackOnClick: ((Date?) -> Void)?
@@ -16,20 +17,29 @@ class CalendarWeekCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initialize()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        initialize()
     }
     
-    func initialize() {
+    func initialize(type: CalendarType?) {
+        if type == .onlyWeek, self.dayHeaderView == nil {
+            self.dayHeaderView = CalendarDayHeaderView()
+            self.contentView.addSubview(self.dayHeaderView!)
+            
+            Cartography.constrain(self.dayHeaderView!) { (stack) in
+                stack.top == stack.superview!.top
+                stack.trailing == stack.superview!.trailing
+                stack.leading == stack.superview!.leading
+                stack.height == 30.0
+            }
+        }
+        
         if self.stackView == nil {
             self.backgroundColor = .clear
             
             self.stackView = UIStackView(frame: .zero)
-            self.stackView?.backgroundColor = .clear
             self.stackView?.backgroundColor = .clear
             self.stackView?.axis = .horizontal
             self.stackView?.alignment = .fill
@@ -37,10 +47,16 @@ class CalendarWeekCell: UICollectionViewCell {
             self.stackView?.distribution = .fillEqually
             self.contentView.addSubview(self.stackView!)
             
-            Cartography.constrain(self.stackView!) { (v) in
+            let topView = self.dayHeaderView ?? self.contentView
+            
+            Cartography.constrain(self.stackView!, topView) { (v, topView) in
                 v.leading == v.superview!.leading
                 v.trailing == v.superview!.trailing
-                v.top == v.superview!.top
+                if type == .onlyWeek {
+                    v.top == topView.bottom
+                } else {
+                    v.top == v.superview!.top
+                }
                 v.bottom == v.superview!.bottom
             }
         }
@@ -53,6 +69,15 @@ class CalendarWeekCell: UICollectionViewCell {
     func setup(delegate: CalendarProtocol?, array: [CalendarDayObject], cellHeight: CGFloat, callbackOnClick: ((Date?) -> Void)? ) {
         self.arrayDays = array
         self.delegate = delegate
+        
+        initialize(type: self.delegate?.type())
+        if let header = self.dayHeaderView {
+            let weeks = array.map({ (obj) -> Date in
+                return obj.date ?? Date()
+            })
+            header.setup(weeks: weeks)
+        }
+        
         var subCount = self.stackView?.subviews.count ?? 0
         
         if subCount < 7 {

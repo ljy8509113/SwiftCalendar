@@ -127,9 +127,12 @@ class CalendarMonthCell: UICollectionViewCell {
             self.selectedRow = row
             if selectCell.contentView.subviews.first(where: { $0 is CalendarWeekContainerCell }) == nil {
                 selectCell.contentView.addSubview(cell)
-                cell.frame = selectCell.bounds
+                var frame = selectCell.bounds
+                frame.size.height = weekCellHeight()
+                cell.frame = frame
             }
-            cell.setup(data: weekData, cellHeight: self.cellHeight, delegate: self)
+//            cell.setup(data: weekData, cellHeight: self.cellHeight, delegate: self)
+            cell.setup(data: weekData, cellHeight: weekCellHeight(), delegate: self)
         }
     }
     
@@ -187,9 +190,9 @@ extension CalendarMonthCell: UICollectionViewDelegate {
 extension CalendarMonthCell: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let cell = collectionView.cellForItem(at: indexPath) as? CalendarWeekCell
+        var height = self.cellHeight - self.movePoint
+        
         if let row = self.selectedRow, indexPath.row != row {
-            
-            var height = self.cellHeight - self.movePoint
             
             if height < 0.0 {
                 height = 0.0
@@ -203,11 +206,19 @@ extension CalendarMonthCell: UICollectionViewDelegateFlowLayout {
             return CGSize(width: collectionView.frame.size.width, height: height)
         } else {
             //            print("index: \(indexPath.row)")
+            
+            if height < weekCellHeight() {
+                height = weekCellHeight()
+            } else if height > self.cellHeight {
+                height = self.cellHeight
+            }
+            
             cell?.changeAlpha(alpha: self.cellAlpha)
-            self.weekContainerCell?.alpha = 1.0 - self.cellAlpha
+//            self.weekContainerCell?.alpha = 1.0 - self.cellAlpha
+            self.weekContainerCell?.changeHeight(height: height, alpha: 1.0 - self.cellAlpha)
             
 //            print("3. cell index : \(indexPath.row) :: \(self.cellHeight) :: \(self.cellAlpha)")
-            return CGSize(width: collectionView.frame.size.width, height: self.cellHeight)
+            return CGSize(width: collectionView.frame.size.width, height: height)
         }
     }
 }
@@ -240,5 +251,9 @@ extension CalendarMonthCell: CalendarProtocol {
     
     func type() -> CalendarType? {
         return self.delegate?.type()
+    }
+    
+    func weekCellHeight() -> CGFloat {
+        return self.delegate?.weekCellHeight() ?? 0.0
     }
 }

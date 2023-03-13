@@ -12,10 +12,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="h9T-Al-hcf" customClass="CalendarMonthContainerCell" customModule="CalendarSample" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="383" height="393"/>
+            <rect key="frame" x="0.0" y="0.0" width="383" height="371"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Mjo-Fw-I1d">
-                <rect key="frame" x="0.0" y="0.0" width="383" height="393"/>
+                <rect key="frame" x="0.0" y="0.0" width="383" height="371"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XlZ-62-tvx">
@@ -77,15 +77,15 @@
                             <constraint firstItem="d3n-eN-QSf" firstAttribute="leading" secondItem="XlZ-62-tvx" secondAttribute="leading" id="viR-S7-25w"/>
                         </constraints>
                     </view>
-                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="GMl-wM-5qD">
-                        <rect key="frame" x="0.0" y="40" width="383" height="50"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="GMl-wM-5qD" customClass="CalendarDayHeaderView" customModule="CalendarSample" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="40" width="383" height="30"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="height" constant="50" id="KT7-BL-8w9"/>
+                            <constraint firstAttribute="height" constant="30" id="KT7-BL-8w9"/>
                         </constraints>
                     </stackView>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="2rT-Mc-594">
-                        <rect key="frame" x="0.0" y="90" width="383" height="300"/>
+                        <rect key="frame" x="0.0" y="70" width="383" height="300"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="300" id="8Qf-c5-MGw"/>
@@ -113,7 +113,7 @@
                     <constraint firstItem="XlZ-62-tvx" firstAttribute="top" secondItem="Mjo-Fw-I1d" secondAttribute="top" id="tb7-er-2LB"/>
                 </constraints>
             </collectionViewCellContentView>
-            <size key="customSize" width="383" height="393"/>
+            <size key="customSize" width="383" height="371"/>
             <connections>
                 <outlet property="collectionView" destination="2rT-Mc-594" id="nQG-Rq-YoN"/>
                 <outlet property="constraintCollectionHeight" destination="8Qf-c5-MGw" id="u7y-mB-wAo"/>
@@ -121,7 +121,7 @@
                 <outlet property="stackView" destination="GMl-wM-5qD" id="qda-M8-iXc"/>
                 <outlet property="viewTop" destination="XlZ-62-tvx" id="iPM-9c-oa2"/>
             </connections>
-            <point key="canvasLocation" x="826.71755725190837" y="109.50704225352113"/>
+            <point key="canvasLocation" x="826.71755725190837" y="101.7605633802817"/>
         </collectionViewCell>
     </objects>
     <resources>

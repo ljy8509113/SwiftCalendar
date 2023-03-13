@@ -44,97 +44,33 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "BED602E9-7CCD-4D9F-9DDE-038485125992"
-            shouldBeEnabled = "No"
+            uuid = "ABE0EE87-14F8-4AD9-A781-C23290B8220B"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CalendarSample/CalendarCollectionViewFlowLayout.swift"
+            filePath = "CalendarSample/CalendarDateHeaderView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "getCalendarAttributes(at:)"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "init(frame:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "B5A41964-AA3D-4039-AD77-1AE2B37B8E77"
-            shouldBeEnabled = "No"
+            uuid = "D5A2FB72-D882-4E01-AA23-DC2F835101C3"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CalendarSample/CalendarCollectionViewFlowLayout.swift"
+            filePath = "CalendarSample/CalendarDateHeaderView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
-            landmarkName = "getCalendarAttributes(at:)"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "init(coder:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "769A7044-ED61-4724-AE5C-0472E8843D8D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CalendarSample/CalendarCollectionViewFlowLayout.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "getCalendarAttributes(at:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "EEEE45E1-0AC0-4A9A-A542-564A40E1C61D"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CalendarSample/CalendarCollectionViewFlowLayout.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "99"
-            endingLineNumber = "99"
-            landmarkName = "getCalendarAttributes(at:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "EEEE45E1-0AC0-4A9A-A542-564A40E1C61D - a5a964b2053db550"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CalendarSample.CalendarCollectionViewFlowLayout.getCalendarAttributes(at: Swift.Optional&lt;Foundation.IndexPath&gt;) -&gt; Swift.Optional&lt;__C.UICollectionViewLayoutAttributes&gt;"
-                  moduleName = "CalendarSample"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/murf/Desktop/Source/TEST/CalendarSample/SwiftCalendar/CalendarSample/CalendarCollectionViewFlowLayout.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "99"
-                  endingLineNumber = "99"
-                  offsetFromSymbolStart = "824">
-               </Location>
-               <Location
-                  uuid = "EEEE45E1-0AC0-4A9A-A542-564A40E1C61D - a5a964b2053db550"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "CalendarSample.CalendarCollectionViewFlowLayout.getCalendarAttributes(at: Swift.Optional&lt;Foundation.IndexPath&gt;) -&gt; Swift.Optional&lt;__C.UICollectionViewLayoutAttributes&gt;"
-                  moduleName = "CalendarSample"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/murf/Desktop/Source/TEST/CalendarSample/SwiftCalendar/CalendarSample/CalendarCollectionViewFlowLayout.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "99"
-                  endingLineNumber = "99"
-                  offsetFromSymbolStart = "1040">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
